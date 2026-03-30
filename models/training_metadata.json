@@ -1,0 +1,49 @@
+{
+  "training_date": "2025-09-04 13:31:36.865977",
+  "config_used": {
+    "data_paths": {
+      "items_dataset": "data/raw/fastFasionItemsDim.csv",
+      "companies_dataset": "data/raw/fastFashionCompDim.csv",
+      "images_directory": "data/images",
+      "processed_data": "data/processed/products.json"
+    },
+    "model_paths": {
+      "visual_model": "data/processed/visual_model.pkl",
+      "carbon_data": "data/processed/carbon_data.pkl",
+      "sustainability_model": "data/processed/sustainability_model.pkl"
+    },
+    "training_params": {
+      "batch_size": 32,
+      "feature_extraction": {
+        "model": "resnet50",
+        "input_size": [
+          224,
+          224
+        ],
+        "pooling": "max"
+      },
+      "similarity": {
+        "algorithm": "brute",
+        "metric": "euclidean",
+        "n_neighbors": 10
+      }
+    },
+    "api_config": {
+      "host": "0.0.0.0",
+      "port": 5000,
+      "debug": true
+    }
+  },
+  "training_stats": {
+    "total_products": 200,
+    "total_images": 371,
+    "categories": 5,
+    "avg_carbon_footprint": 4.8377,
+    "avg_sustainability_score": 57.191
+  },
+  "model_paths": {
+    "visual_model": "data/processed/visual_model.pkl",
+    "carbon_data": "data/processed/carbon_data.pkl",
+    "sustainability_model": "data/processed/sustainability_model.pkl"
+  }
+}

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent an Item - EcoThrift</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2D5016;
+            --secondary: #56C596;
+            --accent: #F4A261;
+            --cream: #FAF8F3;
+            --dark: #1a1a1a;
+            --light-amber: #FFF8F0;
+            --mid-amber: #FFE0B2;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: white;
+            padding: 1rem 3rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.7rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--accent);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { background: var(--accent); color: white; }
+
+        /* HERO */
+        .page-hero {
+            background: linear-gradient(135deg, #7B3F00 0%, #c0621a 50%, var(--accent) 100%);
+            padding: 4rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M0 0h40v40H0zM40 40h40v40H40z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .page-hero-content { position: relative; z-index: 1; }
+        .page-hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.2rem;
+            color: white;
+            margin-bottom: 0.8rem;
+        }
+        .page-hero h1 em { font-style: italic; color: #ffe0b2; }
+        .page-hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .how-it-works {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .how-step {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+        .how-step i { font-size: 1.1rem; opacity: 0.9; }
+
+        /* FORM */
+        .form-page {
+            max-width: 860px;
+            margin: -2rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        .form-section {
+            padding: 2.2rem 2.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            animation: fadeUp 0.5s ease both;
+        }
+        .form-section:last-of-type { border-bottom: none; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.4rem;
+        }
+        .s-icon {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+        .s-icon.amber { background: #FFF3E0; color: #e67e22; }
+        .s-icon.green { background: #E8F5E9; color: var(--primary); }
+        .section-label h3 { font-size: 1rem; color: var(--primary); font-weight: 700; }
+        .section-label p { font-size: 0.78rem; color: #aaa; }
+
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .field { margin-bottom: 1rem; }
+        .field:last-child { margin-bottom: 0; }
+        .field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+        }
+        .req { color: #f44336; }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: all 0.25s;
+            background: #fafafa;
+        }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(244,162,97,0.15);
+        }
+        .field textarea { resize: vertical; min-height: 80px; }
+
+        /* SIZE */
+        .size-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .sz {
+            padding: 0.45rem 1rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .sz:hover { border-color: var(--accent); color: var(--accent); }
+        .sz.on { border-color: var(--accent); background: var(--accent); color: white; }
+
+        /* DURATION DISPLAY */
+        .duration-badge {
+            display: none;
+            padding: 0.7rem 1rem;
+            background: var(--light-amber);
+            border: 1.5px solid var(--accent);
+            border-radius: 12px;
+            font-weight: 700;
+            color: #c0621a;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .duration-badge.show { display: flex; }
+
+        /* OCCASION CARDS */
+        .occasion-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+        .occ-card {
+            border: 1.5px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 0.9rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: white;
+        }
+        .occ-card:hover { border-color: var(--accent); background: var(--light-amber); }
+        .occ-card.on { border-color: var(--accent); background: var(--light-amber); }
+        .occ-emoji { font-size: 1.7rem; display: block; margin-bottom: 0.3rem; }
+        .occ-name { font-size: 0.72rem; font-weight: 700; color: var(--dark); }
+        input[type="hidden"] { display: none; }
+
+        /* AGREEMENT */
+        .agree-box {
+            background: #fafafa;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 14px;
+            padding: 1.3rem;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .agree-box h4 { color: var(--primary); margin-bottom: 0.6rem; font-size: 0.9rem; }
+        .agree-box::-webkit-scrollbar { width: 4px; }
+        .agree-box::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 4px; }
+        .agree-box::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+        .agree-check {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.9rem 1.1rem;
+            background: var(--light-amber);
+            border-radius: 12px;
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .agree-check:hover { border-color: var(--accent); }
+        .agree-check input[type="checkbox"] {
+            width: 20px; height: 20px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .agree-check span { font-size: 0.85rem; color: #555; line-height: 1.5; }
+        .agree-check strong { color: var(--primary); }
+
+        /* SIGNATURE */
+        .sig-wrap {
+            border: 1.5px solid #e5e5e5;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+        .sig-toolbar {
+            background: #f8f8f8;
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .sig-tool-btn {
+            padding: 0.35rem 0.8rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 7px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .sig-tool-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        canvas#sigCanvas {
+            display: block;
+            width: 100%;
+            height: 140px;
+            cursor: crosshair;
+            touch-action: none;
+            background: white;
+        }
+        .sig-hint {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #bbb;
+            padding: 0.4rem;
+            background: #fafafa;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        /* SUBMIT */
+        .submit-section {
+            padding: 2rem 2.5rem;
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .submit-info { flex: 1; }
+        .submit-info h4 { color: #c0621a; font-size: 1rem; margin-bottom: 0.3rem; }
+        .submit-info p { font-size: 0.82rem; color: #888; }
+        .submit-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #c0621a 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(244,162,97,0.45); }
+
+        /* SUCCESS */
+        .success-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-overlay.show { display: flex; }
+        .success-box {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
+            animation: popIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        @keyframes popIn { from{transform:scale(0.75);opacity:0;} to{transform:scale(1);opacity:1;} }
+        .success-tick {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--accent), #c0621a);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.2rem;
+            color: white;
+        }
+        .success-box h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .success-box p { color: #666; margin-bottom: 1.8rem; font-size: 0.92rem; line-height: 1.6; }
+        .success-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .s-btn-primary {
+            padding: 0.8rem 1.8rem;
+            background: var(--accent);
+            color: white; border: none;
+            border-radius: 12px; cursor: pointer;
+            font-weight: 700; font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; transition: all 0.3s;
+        }
+        .s-btn-primary:hover { background: #c0621a; }
+        .s-btn-outline {
+            padding: 0.8rem 1.8rem;
+            background: white; color: var(--primary);
+            border: 2px solid var(--secondary);
+            border-radius: 12px; cursor: pointer;
+            font-weight: 700; font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; transition: all 0.3s;
+        }
+        .s-btn-outline:hover { background: #E8F5E9; }
+
+        @media(max-width:700px) {
+            .page-hero h1 { font-size: 2.2rem; }
+            .field-row { grid-template-columns: 1fr; }
+            .occasion-grid { grid-template-columns: repeat(2, 1fr); }
+            .how-it-works { gap: 0.8rem; }
+            .form-section { padding: 1.5rem; }
+            nav { padding: 1rem 1.5rem; }
+            .form-page { margin-top: -1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> EcoThrift</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+    <div class="page-hero-content">
+        <h1>Rent <em>Fashion</em> for Any Occasion</h1>
+        <p>Wear stunning designer pieces without the price tag. Return after the event — no waste, no guilt.</p>
+        <div class="how-it-works">
+            <div class="how-step"><i class="fas fa-search"></i> Choose Item</div>
+            <div class="how-step"><i class="fas fa-calendar"></i> Pick Dates</div>
+            <div class="how-step"><i class="fas fa-file-signature"></i> Sign Agreement</div>
+            <div class="how-step"><i class="fas fa-truck"></i> Receive & Enjoy</div>
+        </div>
+    </div>
+</div>
+
+<!-- FORM -->
+<div class="form-page">
+    <div class="form-card">
+
+        <!-- CONTACT INFO -->
+        <div class="form-section" style="animation-delay:0.05s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-user"></i></div>
+                <div><h3>Your Details <span class="req">*</span></h3><p>We'll contact you about your rental</p></div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Full Name <span class="req">*</span></label>
+                    <input type="text" id="rName" placeholder="As per government ID">
+                </div>
+                <div class="field">
+                    <label>Email Address <span class="req">*</span></label>
+                    <input type="email" id="rEmail" placeholder="you@email.com">
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Phone Number</label>
+                    <input type="tel" id="rPhone" placeholder="+91 98765 43210">
+                </div>
+                <div class="field">
+                    <label>City</label>
+                    <input type="text" id="rCity" placeholder="e.g. Mumbai, Delhi">
+                </div>
+            </div>
+        </div>
+
+        <!-- ITEM -->
+        <div class="form-section" style="animation-delay:0.1s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-tshirt"></i></div>
+                <div><h3>Item to Rent <span class="req">*</span></h3><p>Describe what you're looking for</p></div>
+            </div>
+            <div class="field">
+                <label>Item Name / Description <span class="req">*</span></label>
+                <input type="text" id="rItem" placeholder="e.g. Jonathan Simkhai Giana Draped Gown — Blue">
+            </div>
+        </div>
+
+        <!-- DATES -->
+        <div class="form-section" style="animation-delay:0.15s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-calendar-alt"></i></div>
+                <div><h3>Rental Period <span class="req">*</span></h3><p>You'll be charged per day</p></div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Start Date <span class="req">*</span></label>
+                    <input type="date" id="rStart" onchange="calcDuration()">
+                </div>
+                <div class="field">
+                    <label>End Date <span class="req">*</span></label>
+                    <input type="date" id="rEnd" onchange="calcDuration()">
+                </div>
+            </div>
+            <div class="duration-badge" id="durationBadge">
+                <i class="fas fa-clock"></i>
+                <span id="durationText">0 days selected</span>
+            </div>
+        </div>
+
+        <!-- SIZE -->
+        <div class="form-section" style="animation-delay:0.2s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-ruler-combined"></i></div>
+                <div><h3>Size Required <span class="req">*</span></h3><p>We'll confirm availability for your size</p></div>
+            </div>
+            <div class="size-row" id="rSzRow">
+                <span class="sz" onclick="pickSz(this,'rSzVal')">XS</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">S</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">M</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">L</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">XL</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">XXL</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">3XL</span>
+                <span class="sz" onclick="pickSz(this,'rSzVal')">Custom</span>
+            </div>
+            <input type="hidden" id="rSzVal">
+            <input type="text" id="rSzCustom" placeholder="Enter your measurements (e.g. Bust 36, Waist 28, Hips 38)" style="margin-top:0.8rem;display:none;width:100%;padding:0.8rem 1rem;border:1.5px solid #e5e5e5;border-radius:12px;font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;">
+        </div>
+
+        <!-- OCCASION -->
+        <div class="form-section" style="animation-delay:0.25s">
+            <div class="section-label">
+                <div class="s-icon green"><i class="fas fa-glass-cheers"></i></div>
+                <div><h3>Occasion</h3><p>Helps us recommend the perfect piece</p></div>
+            </div>
+            <div class="occasion-grid">
+                <div class="occ-card" onclick="pickOcc(this,'Wedding Guest')">
+                    <span class="occ-emoji">💍</span>
+                    <div class="occ-name">Wedding Guest</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Bride / Groom')">
+                    <span class="occ-emoji">👑</span>
+                    <div class="occ-name">Bride / Groom</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Formal Event')">
+                    <span class="occ-emoji">🎩</span>
+                    <div class="occ-name">Formal Event</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Party')">
+                    <span class="occ-emoji">🎉</span>
+                    <div class="occ-name">Party</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Photoshoot')">
+                    <span class="occ-emoji">📸</span>
+                    <div class="occ-name">Photoshoot</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Corporate')">
+                    <span class="occ-emoji">💼</span>
+                    <div class="occ-name">Corporate</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Festival')">
+                    <span class="occ-emoji">🪔</span>
+                    <div class="occ-name">Festival</div>
+                </div>
+                <div class="occ-card" onclick="pickOcc(this,'Other')">
+                    <span class="occ-emoji">✨</span>
+                    <div class="occ-name">Other</div>
+                </div>
+            </div>
+            <input type="hidden" id="rOcc">
+        </div>
+
+        <!-- RENTAL AGREEMENT -->
+        <div class="form-section" style="animation-delay:0.3s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-file-contract"></i></div>
+                <div><h3>Rental Agreement <span class="req">*</span></h3><p>Please read carefully before signing</p></div>
+            </div>
+            <div class="agree-box">
+                <h4>EcoThrift Rental Terms & Conditions</h4>
+                <p><strong>1. Item Care & Responsibility:</strong> The Renter agrees to take full responsibility for the rented item during the rental period. Items must be handled with care and returned in the same condition as received, excluding normal wear.</p><br>
+                <p><strong>2. Return Policy:</strong> Items must be returned by 6:00 PM on the agreed end date. Late returns will incur an additional charge of ₹200 per day beyond the agreed return date, automatically deducted from the security deposit.</p><br>
+                <p><strong>3. Damage & Loss Policy:</strong> Any damage beyond normal wear or loss of the item will be charged to the Renter at the item's current replacement value. EcoThrift reserves the right to assess damage independently within 48 hours of return.</p><br>
+                <p><strong>4. Cleaning Requirements:</strong> Items must be returned clean. If EcoThrift determines that professional cleaning is required due to the Renter's use, cleaning costs will be deducted from the security deposit. Do not attempt to wash garments at home without checking the care label.</p><br>
+                <p><strong>5. Security Deposit:</strong> A refundable security deposit equal to 30% of the item's retail price is collected at the time of rental confirmation. This deposit will be refunded within 7 business days after successful item return and inspection.</p><br>
+                <p><strong>6. Cancellation Policy:</strong> Cancellations made 48+ hours before the rental start date are eligible for a full refund. Cancellations within 48 hours of the rental start will forfeit 50% of the rental fee. No-shows forfeit the full rental fee.</p><br>
+                <p><strong>7. Alterations Prohibited:</strong> Permanent alterations, repairs, dry-cleaning, or washing of rented items is strictly prohibited unless expressly approved in writing by EcoThrift.</p><br>
+                <p><strong>8. Governing Law:</strong> This agreement is governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in the Renter's city.</p><br>
+                <p><em>By signing below, I confirm I am 18 years or older, have read this agreement in full, and agree to all terms and conditions stated above.</em></p>
+            </div>
+            <label class="agree-check">
+                <input type="checkbox" id="agreeCheck">
+                <span>I have read and agree to the <strong>Rental Terms & Conditions</strong>. I understand that my digital signature below constitutes a legally binding agreement.</span>
+            </label>
+        </div>
+
+        <!-- DIGITAL SIGNATURE -->
+        <div class="form-section" style="animation-delay:0.35s">
+            <div class="section-label">
+                <div class="s-icon amber"><i class="fas fa-pen-nib"></i></div>
+                <div><h3>Digital Signature <span class="req">*</span></h3><p>Draw your signature — it will be embedded in the agreement</p></div>
+            </div>
+            <div class="sig-wrap">
+                <div class="sig-toolbar">
+                    <span>Pen colour:</span>
+                    <input type="color" id="penColor" value="#1a1a1a" style="width:24px;height:24px;border:none;cursor:pointer;border-radius:4px;padding:0;flex-shrink:0;">
+                    <span style="margin-left:auto;">Thickness:</span>
+                    <input type="range" id="penSize" min="1" max="6" value="2" style="width:70px;accent-color:var(--accent);">
+                    <button class="sig-tool-btn" onclick="clearSig()"><i class="fas fa-eraser"></i> Clear</button>
+                    <button class="sig-tool-btn" onclick="saveSig()"><i class="fas fa-download"></i> Save PNG</button>
+                </div>
+                <canvas id="sigCanvas" width="800" height="140"></canvas>
+                <div class="sig-hint">✍️ Sign inside this box using your mouse or touchscreen</div>
+            </div>
+        </div>
+
+        <!-- NOTES -->
+        <div class="form-section" style="animation-delay:0.4s">
+            <div class="section-label">
+                <div class="s-icon green"><i class="fas fa-comment-alt"></i></div>
+                <div><h3>Additional Notes</h3><p>Anything else we should know?</p></div>
+            </div>
+            <div class="field">
+                <label>Notes / Special Requests</label>
+                <textarea id="rNotes" placeholder="Specific measurements, styling preferences, delivery requirements, etc."></textarea>
+            </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-section">
+            <div class="submit-info">
+                <h4>🔑 Ready to rent?</h4>
+                <p>We'll confirm availability within 2 hours and send details to your email.</p>
+            </div>
+            <button class="submit-btn" onclick="submitRental()">
+                <i class="fas fa-file-signature"></i> Submit Rental Request
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+        <div class="success-tick">🔑</div>
+        <h2>Request Sent!</h2>
+        <p id="successMsg">Your rental request has been submitted. We'll confirm within 2 hours.</p>
+        <div class="success-actions">
+            <button class="s-btn-primary" onclick="resetAndClose()">Submit Another</button>
+            <button class="s-btn-outline" onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Size picker
+function pickSz(el, hiddenId) {
+    el.closest('.size-row').querySelectorAll('.sz').forEach(s => s.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById(hiddenId).value = el.textContent;
+    const customEl = document.getElementById('rSzCustom');
+    if (customEl) customEl.style.display = el.textContent === 'Custom' ? 'block' : 'none';
+}
+
+// Occasion picker
+function pickOcc(el, val) {
+    document.querySelectorAll('.occ-card').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('rOcc').value = val;
+}
+
+// Duration calculator
+function calcDuration() {
+    const s = document.getElementById('rStart').value;
+    const e = document.getElementById('rEnd').value;
+    const badge = document.getElementById('durationBadge');
+    const text = document.getElementById('durationText');
+    if (s && e) {
+        const days = Math.ceil((new Date(e) - new Date(s)) / 86400000);
+        if (days > 0) {
+            text.textContent = `${days} day${days !== 1 ? 's' : ''} selected`;
+            badge.classList.add('show');
+        } else {
+            badge.classList.remove('show');
+        }
+    } else {
+        badge.classList.remove('show');
+    }
+}
+
+// Signature canvas
+let sigDraw = false, sigLX = 0, sigLY = 0;
+let ctx;
+
+function initCanvas() {
+    const canvas = document.getElementById('sigCanvas');
+    const w = canvas.offsetWidth;
+    if (w > 0) canvas.width = w;
+    ctx = canvas.getContext('2d');
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    const getPos = e => {
+        const r = canvas.getBoundingClientRect();
+        const sx = canvas.width / r.width, sy = canvas.height / r.height;
+        const src = e.touches ? e.touches[0] : e;
+        return { x: (src.clientX - r.left) * sx, y: (src.clientY - r.top) * sy };
+    };
+
+    const startDraw = e => {
+        sigDraw = true;
+        const p = getPos(e);
+        sigLX = p.x; sigLY = p.y;
+        // Dot for click
+        ctx.fillStyle = document.getElementById('penColor').value;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, parseInt(document.getElementById('penSize').value)/2, 0, Math.PI*2);
+        ctx.fill();
+    };
+    const draw = e => {
+        if (!sigDraw) return;
+        e.preventDefault();
+        const p = getPos(e);
+        ctx.strokeStyle = document.getElementById('penColor').value;
+        ctx.lineWidth = parseInt(document.getElementById('penSize').value);
+        ctx.beginPath(); ctx.moveTo(sigLX, sigLY); ctx.lineTo(p.x, p.y); ctx.stroke();
+        sigLX = p.x; sigLY = p.y;
+    };
+    const stopDraw = () => sigDraw = false;
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseleave', stopDraw);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(e); }, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', stopDraw);
+}
+
+function clearSig() {
+    const c = document.getElementById('sigCanvas');
+    ctx.clearRect(0, 0, c.width, c.height);
+}
+
+function saveSig() {
+    const a = document.createElement('a');
+    a.download = 'ecothrift-rental-agreement-signature.png';
+    a.href = document.getElementById('sigCanvas').toDataURL();
+    a.click();
+}
+
+function isSigEmpty() {
+    const c = document.getElementById('sigCanvas');
+    const d = ctx.getImageData(0, 0, c.width, c.height).data;
+    for (let i = 3; i < d.length; i += 4) if (d[i] > 0) return false;
+    return true;
+}
+
+// Submit
+function submitRental() {
+    const name  = document.getElementById('rName').value.trim();
+    const email = document.getElementById('rEmail').value.trim();
+    const item  = document.getElementById('rItem').value.trim();
+    const start = document.getElementById('rStart').value;
+    const end   = document.getElementById('rEnd').value;
+    const szVal = document.getElementById('rSzVal').value;
+    const size  = szVal === 'Custom'
+        ? document.getElementById('rSzCustom').value.trim()
+        : szVal;
+    const agreed = document.getElementById('agreeCheck').checked;
+
+    if (!name)   { alert('Please enter your full name.'); return; }
+    if (!email)  { alert('Please enter your email address.'); return; }
+    if (!item)   { alert('Please describe the item you want to rent.'); return; }
+    if (!start)  { alert('Please select a start date.'); return; }
+    if (!end)    { alert('Please select an end date.'); return; }
+    if (new Date(end) <= new Date(start)) { alert('End date must be after start date.'); return; }
+    if (!size)   { alert('Please select your size.'); return; }
+    if (!agreed) { alert('Please read and accept the Rental Agreement before signing.'); return; }
+    if (isSigEmpty()) { alert('Please draw your signature in the signature box.'); return; }
+
+    const days = Math.ceil((new Date(end) - new Date(start)) / 86400000);
+
+    // Save to localStorage
+    const rentals = JSON.parse(localStorage.getItem('et_rentals') || '[]');
+    rentals.push({
+        id: Date.now(), name, email, item, start, end, size, days,
+        phone: document.getElementById('rPhone').value,
+        city: document.getElementById('rCity').value,
+        occasion: document.getElementById('rOcc').value,
+        notes: document.getElementById('rNotes').value,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('et_rentals', JSON.stringify(rentals));
+
+    document.getElementById('successMsg').textContent =
+        `Rental request for "${item}" (${days} day${days!==1?'s':''}, size ${size}) submitted successfully. We'll contact ${email} within 2 hours to confirm.`;
+    document.getElementById('successOverlay').classList.add('show');
+}
+
+function resetAndClose() {
+    document.getElementById('successOverlay').classList.remove('show');
+    ['rName','rEmail','rPhone','rCity','rItem','rNotes'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('rStart').value = '';
+    document.getElementById('rEnd').value = '';
+    document.getElementById('rSzVal').value = '';
+    document.getElementById('rSzCustom').style.display = 'none';
+    document.getElementById('rOcc').value = '';
+    document.getElementById('agreeCheck').checked = false;
+    document.querySelectorAll('#rSzRow .sz').forEach(s => s.classList.remove('on'));
+    document.querySelectorAll('.occ-card').forEach(c => c.classList.remove('on'));
+    document.getElementById('durationBadge').classList.remove('show');
+    clearSig();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('rStart').min = today;
+    document.getElementById('rEnd').min = today;
+    setTimeout(initCanvas, 150);
+});
+</script>
+</body>
+</html>

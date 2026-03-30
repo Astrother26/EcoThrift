@@ -1,0 +1,49 @@
+# .dockerignore — keeps image small and build fast
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment — never copy into image
+venv/
+env/
+.venv/
+ENV/
+
+# Cached index — rebuilt or mounted via volume
+data/visual_index.pkl
+
+# Uploads — temporary files
+uploads/
+
+# User data — mounted via volume
+data/users.json
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test files
+tests/
+pytest_cache/
+.coverage

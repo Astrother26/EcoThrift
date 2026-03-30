@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Item - EcoThrift</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #2D5016;
+            --secondary: #56C596;
+            --accent: #F4A261;
+            --cream: #FAF8F3;
+            --dark: #1a1a1a00;
+            --light-green: #E8F5E9;
+            --mid-green: #C8E6C9;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: white;
+            padding: 1rem 3rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.7rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover { background: var(--secondary); color: white; }
+
+        /* HERO BANNER */
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #4a8c27 50%, var(--secondary) 100%);
+            padding: 4rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .page-hero-content { position: relative; z-index: 1; }
+        .page-hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3.2rem;
+            color: white;
+            margin-bottom: 0.8rem;
+        }
+        .page-hero h1 em { font-style: italic; color: #a8e6c4; }
+        .page-hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .hero-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+        .step-num {
+            width: 26px; height: 26px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem;
+            border: 1.5px solid rgba(255,255,255,0.5);
+        }
+
+        /* FORM LAYOUT */
+        .form-page {
+            max-width: 860px;
+            margin: -2rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        /* SECTION BLOCKS */
+        .form-section {
+            padding: 2.2rem 2.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            animation: fadeUp 0.5s ease both;
+        }
+        .form-section:last-of-type { border-bottom: none; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.4rem;
+        }
+        .section-label .s-icon {
+            width: 36px; height: 36px;
+            background: var(--light-green);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 1rem;
+        }
+        .section-label h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .section-label p {
+            font-size: 0.78rem;
+            color: #aaa;
+        }
+
+        /* IMAGE UPLOAD */
+        .img-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+        }
+        .img-slot {
+            border: 2px dashed #d0d0d0;
+            border-radius: 14px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: #fafafa;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.72rem;
+            color: #bbb;
+            gap: 0.3rem;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        .img-slot:hover { border-color: var(--secondary); background: var(--light-green); color: var(--secondary); }
+        .img-slot.filled { border-style: solid; border-color: var(--secondary); border-width: 2px; }
+        .img-slot input { display: none; }
+        .img-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; border-radius: 12px; }
+        .img-slot i { font-size: 1.5rem; }
+        .img-slot .del {
+            display: none;
+            position: absolute; top: 5px; right: 5px;
+            background: rgba(244,67,54,0.9); color: white;
+            border: none; border-radius: 50%;
+            width: 22px; height: 22px; font-size: 0.75rem;
+            cursor: pointer; align-items: center; justify-content: center;
+            z-index: 3; transition: all 0.2s;
+        }
+        .img-slot.filled:hover .del { display: flex; }
+        .img-slot-label {
+            text-align: center;
+            font-size: 0.72rem;
+            color: #aaa;
+            margin-top: 0.4rem;
+        }
+
+        /* FORM FIELDS */
+        .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+        .field { margin-bottom: 1rem; }
+        .field label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.02em;
+        }
+        .req { color: #f44336; }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-family: 'DM Sans', sans-serif;
+            outline: none;
+            transition: all 0.25s;
+            background: #fafafa;
+            color: var(--dark);
+        }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--secondary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(86,197,150,0.12);
+        }
+        .field textarea { resize: vertical; min-height: 90px; }
+
+        /* SIZE SELECTOR */
+        .size-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .sz {
+            padding: 0.45rem 1rem;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .sz:hover { border-color: var(--secondary); color: var(--secondary); }
+        .sz.on { border-color: var(--secondary); background: var(--secondary); color: white; }
+
+        /* CONDITION CARDS */
+        .condition-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; }
+        .cond-card {
+            border: 1.5px solid #e5e5e5;
+            border-radius: 14px;
+            padding: 1rem 0.7rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: white;
+        }
+        .cond-card:hover { border-color: var(--secondary); background: var(--light-green); }
+        .cond-card.on { border-color: var(--secondary); background: var(--light-green); }
+        .cond-card.on .cond-dot { background: var(--secondary); }
+        .cond-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.4rem; }
+        .cond-name { font-size: 0.82rem; font-weight: 700; color: var(--primary); }
+        .cond-desc { font-size: 0.7rem; color: #aaa; margin-top: 0.2rem; }
+
+        /* PRICE ROW */
+        .price-prefix {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .price-wrap { position: relative; }
+        .price-wrap input { padding-left: 2rem; }
+
+        /* SUBMIT AREA */
+        .submit-section {
+            padding: 2rem 2.5rem;
+            background: linear-gradient(135deg, var(--light-green), var(--mid-green));
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .submit-info { flex: 1; }
+        .submit-info h4 { color: var(--primary); font-size: 1rem; margin-bottom: 0.3rem; }
+        .submit-info p { font-size: 0.82rem; color: #666; }
+        .submit-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(45,80,22,0.35); }
+
+        /* SUCCESS OVERLAY */
+        .success-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-overlay.show { display: flex; }
+        .success-box {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            animation: popIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+        }
+        @keyframes popIn { from{transform:scale(0.75);opacity:0;} to{transform:scale(1);opacity:1;} }
+        .success-box .tick {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.2rem;
+            color: white;
+        }
+        .success-box h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .success-box p { color: #666; margin-bottom: 1.8rem; font-size: 0.92rem; line-height: 1.6; }
+        .success-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .s-btn-primary {
+            padding: 0.8rem 1.8rem;
+            background: var(--secondary);
+            color: white; border: none;
+            border-radius: 12px; cursor: pointer;
+            font-weight: 700; font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; transition: all 0.3s;
+        }
+        .s-btn-primary:hover { background: var(--primary); }
+        .s-btn-outline {
+            padding: 0.8rem 1.8rem;
+            background: white; color: var(--primary);
+            border: 2px solid var(--secondary);
+            border-radius: 12px; cursor: pointer;
+            font-weight: 700; font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; transition: all 0.3s;
+        }
+        .s-btn-outline:hover { background: var(--light-green); }
+
+        @media(max-width:700px) {
+            .page-hero h1 { font-size: 2.2rem; }
+            .img-grid { grid-template-columns: repeat(4,1fr); gap: 0.5rem; }
+            .field-row { grid-template-columns: 1fr; }
+            .field-row.three { grid-template-columns: 1fr 1fr; }
+            .condition-grid { grid-template-columns: repeat(2,1fr); }
+            .form-section { padding: 1.5rem; }
+            nav { padding: 1rem 1.5rem; }
+            .form-page { margin-top: -1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> EcoThrift</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+    <div class="page-hero-content">
+        <h1>List Your <em>Pre-Loved</em> Item</h1>
+        <p>Give your wardrobe a second life and earn while helping the planet</p>
+        <div class="hero-steps">
+            <div class="hero-step"><span class="step-num">1</span> Add Photos</div>
+            <div class="hero-step"><span class="step-num">2</span> Describe Item</div>
+            <div class="hero-step"><span class="step-num">3</span> Set Price</div>
+            <div class="hero-step"><span class="step-num">4</span> Go Live!</div>
+        </div>
+    </div>
+</div>
+
+<!-- FORM -->
+<div class="form-page">
+    <div class="form-card">
+
+        <!-- PHOTOS -->
+        <div class="form-section" style="animation-delay:0.05s">
+            <div class="section-label">
+                <div class="s-icon"><i class="fas fa-camera"></i></div>
+                <div>
+                    <h3>Item Photos <span class="req">*</span></h3>
+                    <p>Add up to 4 photos — front, back, detail, label</p>
+                </div>
+            </div>
+            <div class="img-grid">
+                <div>
+                    <div class="img-slot" id="s0" onclick="trigImg('i0')">
+                        <input type="file" id="i0" accept="image/*" onchange="prvImg('s0','p0',this)">
+                        <img id="p0" src="" style="display:none" alt="">
+                        <button class="del" onclick="delImg(event,'s0','p0','i0')">×</button>
+                        <i class="fas fa-camera"></i><span>Main Photo</span>
+                    </div>
+                    <p class="img-slot-label">Front view</p>
+                </div>
+                <div>
+                    <div class="img-slot" id="s1" onclick="trigImg('i1')">
+                        <input type="file" id="i1" accept="image/*" onchange="prvImg('s1','p1',this)">
+                        <img id="p1" src="" style="display:none" alt="">
+                        <button class="del" onclick="delImg(event,'s1','p1','i1')">×</button>
+                        <i class="fas fa-plus"></i><span>Add Photo</span>
+                    </div>
+                    <p class="img-slot-label">Back view</p>
+                </div>
+                <div>
+                    <div class="img-slot" id="s2" onclick="trigImg('i2')">
+                        <input type="file" id="i2" accept="image/*" onchange="prvImg('s2','p2',this)">
+                        <img id="p2" src="" style="display:none" alt="">
+                        <button class="del" onclick="delImg(event,'s2','p2','i2')">×</button>
+                        <i class="fas fa-plus"></i><span>Add Photo</span>
+                    </div>
+                    <p class="img-slot-label">Detail / tag</p>
+                </div>
+                <div>
+                    <div class="img-slot" id="s3" onclick="trigImg('i3')">
+                        <input type="file" id="i3" accept="image/*" onchange="prvImg('s3','p3',this)">
+                        <img id="p3" src="" style="display:none" alt="">
+                        <button class="del" onclick="delImg(event,'s3','p3','i3')">×</button>
+                        <i class="fas fa-plus"></i><span>Add Photo</span>
+                    </div>
+                    <p class="img-slot-label">Label / care tag</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ITEM DETAILS -->
+        <div class="form-section" style="animation-delay:0.1s">
+            <div class="section-label">
+                <div class="s-icon"><i class="fas fa-tag"></i></div>
+                <div><h3>Item Details <span class="req">*</span></h3><p>Tell buyers what you're selling</p></div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>Item Name <span class="req">*</span></label>
+                    <input type="text" id="lName" placeholder="e.g. Floral Summer Dress">
+                </div>
+                <div class="field">
+                    <label>Category <span class="req">*</span></label>
+                    <select id="lCat">
+                        <option value="">Select category</option>
+                        <option>Dresses</option>
+                        <option>Tops & T-Shirts</option>
+                        <option>Shirts</option>
+                        <option>Jeans & Trousers</option>
+                        <option>Jackets & Coats</option>
+                        <option>Sweaters & Knitwear</option>
+                        <option>Skirts</option>
+                        <option>Ethnic Wear</option>
+                        <option>Accessories</option>
+                        <option>Footwear</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Description <span class="req">*</span></label>
+                <textarea id="lDesc" placeholder="Describe the fabric, style, fit, any wear or imperfections, why you're selling it..."></textarea>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label>Brand</label>
+                    <input type="text" id="lBrand" placeholder="e.g. Zara, H&M, Unbranded">
+                </div>
+                <div class="field">
+                    <label>Colour</label>
+                    <input type="text" id="lColour" placeholder="e.g. Navy Blue, Floral Print">
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Material / Fabric</label>
+                <input type="text" id="lMaterial" placeholder="e.g. 100% Cotton, Polyester blend">
+            </div>
+        </div>
+
+        <!-- CONDITION -->
+        <div class="form-section" style="animation-delay:0.15s">
+            <div class="section-label">
+                <div class="s-icon"><i class="fas fa-star"></i></div>
+                <div><h3>Condition <span class="req">*</span></h3><p>Be honest — buyers appreciate transparency</p></div>
+            </div>
+            <div class="condition-grid">
+                <div class="cond-card" onclick="pickCond(this,'Like New')" data-val="Like New">
+                    <span class="cond-emoji">✨</span>
+                    <div class="cond-name">Like New</div>
+                    <div class="cond-desc">Worn once or twice</div>
+                </div>
+                <div class="cond-card" onclick="pickCond(this,'Good')" data-val="Good">
+                    <span class="cond-emoji">👍</span>
+                    <div class="cond-name">Good</div>
+                    <div class="cond-desc">Gently used</div>
+                </div>
+                <div class="cond-card" onclick="pickCond(this,'Fair')" data-val="Fair">
+                    <span class="cond-emoji">🤝</span>
+                    <div class="cond-name">Fair</div>
+                    <div class="cond-desc">Visible wear</div>
+                </div>
+                <div class="cond-card" onclick="pickCond(this,'Vintage')" data-val="Vintage">
+                    <span class="cond-emoji">🏺</span>
+                    <div class="cond-name">Vintage</div>
+                    <div class="cond-desc">Aged with character</div>
+                </div>
+            </div>
+            <input type="hidden" id="lCond">
+        </div>
+
+        <!-- SIZE -->
+        <div class="form-section" style="animation-delay:0.2s">
+            <div class="section-label">
+                <div class="s-icon"><i class="fas fa-ruler"></i></div>
+                <div><h3>Size <span class="req">*</span></h3><p>Select the closest fit</p></div>
+            </div>
+            <div class="size-row" id="lSzRow">
+                <span class="sz" onclick="pickSz(this,'lSzVal')">XS</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">S</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">M</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">L</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">XL</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">XXL</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">3XL</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">Free Size</span>
+                <span class="sz" onclick="pickSz(this,'lSzVal')">Custom</span>
+            </div>
+            <input type="hidden" id="lSzVal">
+            <input type="text" id="lSzCustom" placeholder="Enter your custom size (e.g. 32W × 30L)" style="margin-top:0.8rem;display:none;width:100%;padding:0.8rem 1rem;border:1.5px solid #e5e5e5;border-radius:12px;font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;">
+        </div>
+
+        <!-- PRICING -->
+        <div class="form-section" style="animation-delay:0.25s">
+            <div class="section-label">
+                <div class="s-icon"><i class="fas fa-rupee-sign"></i></div>
+                <div><h3>Pricing</h3><p>Set a fair price to sell faster</p></div>
+            </div>
+            <div class="field-row three">
+                <div class="field">
+                    <label>Selling Price (₹) <span class="req">*</span></label>
+                    <div class="price-wrap">
+                        <span class="price-prefix">₹</span>
+                        <input type="number" id="lPrice" placeholder="499" min="0">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Original Price (₹)</label>
+                    <div class="price-wrap">
+                        <span class="price-prefix">₹</span>
+                        <input type="number" id="lOrigPrice" placeholder="2000" min="0">
+                    </div>
+                </div>
+                <div class="field" id="savings-display" style="display:none">
+                    <label>Buyer Saves</label>
+                    <div style="padding:0.8rem 1rem;background:var(--light-green);border-radius:12px;font-weight:700;color:var(--primary);font-size:1rem;" id="savings-val">—</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-section">
+            <div class="submit-info">
+                <h4>🌿 Ready to go green?</h4>
+                <p>Your listing will be live instantly for buyers to discover.</p>
+            </div>
+            <button class="submit-btn" onclick="submitListing()">
+                <i class="fas fa-leaf"></i> List My Item
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+        <div class="tick">✓</div>
+        <h2>Listed!</h2>
+        <p id="successMsg">Your item is now live. Buyers can discover and purchase it!</p>
+        <div class="success-actions">
+            <button class="s-btn-primary" onclick="listAnother()">List Another</button>
+            <button class="s-btn-outline" onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Image upload
+function trigImg(id) { document.getElementById(id).click(); }
+function prvImg(slotId, prevId, input) {
+    if (!input.files || !input.files[0]) return;
+    const r = new FileReader();
+    r.onload = e => {
+        const p = document.getElementById(prevId);
+        p.src = e.target.result; p.style.display = 'block';
+        document.getElementById(slotId).classList.add('filled');
+    };
+    r.readAsDataURL(input.files[0]);
+}
+function delImg(e, slotId, prevId, inputId) {
+    e.stopPropagation();
+    const p = document.getElementById(prevId);
+    p.src = ''; p.style.display = 'none';
+    document.getElementById(slotId).classList.remove('filled');
+    document.getElementById(inputId).value = '';
+}
+
+// Condition
+let selectedCond = '';
+function pickCond(el, val) {
+    document.querySelectorAll('.cond-card').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    selectedCond = val;
+    document.getElementById('lCond').value = val;
+}
+
+// Size
+function pickSz(el, hiddenId) {
+    el.closest('.size-row').querySelectorAll('.sz').forEach(s => s.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById(hiddenId).value = el.textContent;
+    const customInp = document.getElementById(hiddenId === 'lSzVal' ? 'lSzCustom' : 'rSzCustom');
+    if (customInp) customInp.style.display = el.textContent === 'Custom' ? 'block' : 'none';
+}
+
+// Savings calculator
+document.addEventListener('DOMContentLoaded', () => {
+    const price = document.getElementById('lPrice');
+    const orig = document.getElementById('lOrigPrice');
+    function calcSavings() {
+        const p = parseFloat(price.value), o = parseFloat(orig.value);
+        const disp = document.getElementById('savings-display');
+        const val = document.getElementById('savings-val');
+        if (p > 0 && o > p) {
+            const pct = Math.round((1 - p/o) * 100);
+            val.textContent = `${pct}% off (₹${(o - p).toFixed(0)})`;
+            disp.style.display = 'block';
+        } else {
+            disp.style.display = 'none';
+        }
+    }
+    price.addEventListener('input', calcSavings);
+    orig.addEventListener('input', calcSavings);
+});
+
+// Submit
+function submitListing() {
+    const name = document.getElementById('lName').value.trim();
+    const cat  = document.getElementById('lCat').value;
+    const desc = document.getElementById('lDesc').value.trim();
+    const cond = document.getElementById('lCond').value;
+    const price = document.getElementById('lPrice').value;
+    const szVal = document.getElementById('lSzVal').value;
+    const size = szVal === 'Custom'
+        ? document.getElementById('lSzCustom').value.trim()
+        : szVal;
+    const hasImg = document.getElementById('p0').src && document.getElementById('p0').style.display !== 'none';
+
+    if (!hasImg) { shake(); alert('Please add at least one photo of your item.'); return; }
+    if (!name)   { alert('Please enter the item name.'); return; }
+    if (!cat)    { alert('Please select a category.'); return; }
+    if (!desc)   { alert('Please add a description.'); return; }
+    if (!cond)   { alert('Please select the item condition.'); return; }
+    if (!size)   { alert('Please select a size.'); return; }
+    if (!price)  { alert('Please set a selling price.'); return; }
+
+    // Save to localStorage
+    const listings = JSON.parse(localStorage.getItem('et_listings') || '[]');
+    listings.push({
+        id: Date.now(), name, cat, desc, cond, price, size,
+        brand: document.getElementById('lBrand').value,
+        colour: document.getElementById('lColour').value,
+        material: document.getElementById('lMaterial').value,
+        originalPrice: document.getElementById('lOrigPrice').value,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('et_listings', JSON.stringify(listings));
+
+    document.getElementById('successMsg').textContent =
+        `"${name}" (${cat}, Size ${size}) is now live. Eco shoppers can discover it!`;
+    document.getElementById('successOverlay').classList.add('show');
+}
+
+function listAnother() {
+    document.getElementById('successOverlay').classList.remove('show');
+    // Reset all fields
+    ['lName','lDesc','lBrand','lPrice','lOrigPrice','lMaterial','lColour'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('lCat').selectedIndex = 0;
+    document.getElementById('lCond').value = '';
+    document.getElementById('lSzVal').value = '';
+    document.getElementById('lSzCustom').style.display = 'none';
+    document.querySelectorAll('.cond-card').forEach(c => c.classList.remove('on'));
+    document.querySelectorAll('#lSzRow .sz').forEach(s => s.classList.remove('on'));
+    [0,1,2,3].forEach(i => {
+        const p = document.getElementById('p'+i); if(p){p.src='';p.style.display='none';}
+        const s = document.getElementById('s'+i); if(s)s.classList.remove('filled');
+        const inp = document.getElementById('i'+i); if(inp)inp.value='';
+    });
+    selectedCond = '';
+    document.getElementById('savings-display').style.display = 'none';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function shake() {
+    document.querySelector('.form-card').style.animation = 'shake 0.4s ease';
+    setTimeout(() => document.querySelector('.form-card').style.animation = '', 500);
+}
+
+const shakeCSS = document.createElement('style');
+shakeCSS.textContent = '@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}';
+document.head.appendChild(shakeCSS);
+</script>
+</body>
+</html>

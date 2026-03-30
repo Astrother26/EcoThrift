@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoThrift - Sustainable Fashion Marketplace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2D5016;
+            --secondary: #56C596;
+            --accent: #F4A261;
+            --cream: #FAF8F3;
+            --dark: #1a1a1a;
+            --light-green: #E8F5E9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--cream);
+            color: var(--dark);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 3rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--secondary); }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: var(--primary);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .icon-btn:hover { color: var(--secondary); }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            font-weight: bold;
+            min-width: 18px;
+            text-align: center;
+            display: none;
+        }
+
+        .login-btn {
+            padding: 0.6rem 1.5rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 90vh;
+            background: linear-gradient(135deg, #FAF8F3 0%, #E8F5E9 100%);
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            min-height: 90vh;
+        }
+
+        .hero-text h1 {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-text .highlight { color: var(--secondary); }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        .stat-box .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .hero-image {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        /* Thrift Collections */
+        .thrift-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .collection-card {
+            background: var(--dark);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collection-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .collection-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(86,197,150,0.1) 0%, rgba(45,80,22,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .collection-card:hover::before { opacity: 1; }
+
+        .collection-icon { font-size: 5rem; margin-bottom: 1rem; }
+
+        .collection-card h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .collection-card p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* AI Recommendation Section */
+        .ai-section {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 3rem;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .ai-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .ai-section > p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .upload-area {
+            border: 3px dashed var(--secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--light-green);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: #C8E6C9;
+            transform: scale(1.02);
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .upload-area h3 { color: var(--primary); margin-bottom: 0.5rem; }
+        .upload-area p { color: #666; }
+
+        #imageUpload { display: none; }
+
+        .upload-btn {
+            margin-top: 1.5rem;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .upload-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(86,197,150,0.4);
+        }
+
+        .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--light-green);
+            border-radius: 15px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #errorMessage {
+            display: none;
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #c62828;
+        }
+
+        /* Results Grid */
+        #results {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 3rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* ========================================
+           PRODUCT CARD WITH QUICK VIEW
+        ======================================== */
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-color: var(--secondary);
+        }
+
+        .product-image {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f5f5 0%, var(--light-green) 100%);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        /* Quick View Button - appears on hover */
+        .quick-view-btn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(45, 80, 22, 0.92);
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .product-card:hover .quick-view-btn {
+            transform: translateY(0);
+        }
+
+        .quick-view-btn:hover {
+            background: var(--secondary);
+        }
+
+        .eco-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            font-size: 0.85rem;
+        }
+
+        .grade-A { background: linear-gradient(135deg, #4CAF50, #8BC34A); }
+        .grade-B { background: linear-gradient(135deg, #2196F3, #03A9F4); }
+        .grade-C { background: linear-gradient(135deg, #FF9800, #FFC107); }
+        .grade-D { background: linear-gradient(135deg, #FF5722, #F44336); }
+        .grade-F { background: linear-gradient(135deg, #9C27B0, #E91E63); }
+
+        .product-info { padding: 1.5rem; }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin: 0.5rem 0;
+        }
+
+        .eco-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: var(--light-green);
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .metric { text-align: center; }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: #666;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-value {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .carbon-saved {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .savings-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .savings-item i {
+            color: var(--secondary);
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .add-to-cart-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(86,197,150,0.4);
+        }
+
+        .add-to-cart-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ========================================
+           QUICK VIEW MODAL
+        ======================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active { display: flex; align-items: center; justify-content: center; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            color: var(--primary);
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+
+        /* Modal Left — Image */
+        .modal-image-panel {
+            position: relative;
+            background: linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 100%);
+            border-radius: 24px 0 0 24px;
+            overflow: hidden;
+            min-height: 500px;
+        }
+
+        .modal-image-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-eco-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* Modal Right — Details */
+        .modal-details-panel {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            overflow-y: auto;
+        }
+
+        .modal-brand {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .modal-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+
+        .modal-divider {
+            border: none;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Description */
+        .modal-description-section h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.6rem;
+        }
+
+        .modal-description-section p {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Material */
+        .modal-material {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            background: var(--light-green);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .modal-material i { color: var(--secondary); }
+
+        /* Eco Metrics Grid in Modal */
+        .modal-eco-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .modal-eco-item {
+            background: var(--light-green);
+            border-radius: 12px;
+            padding: 0.9rem;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary);
+        }
+
+        .modal-eco-item .eco-icon {
+            font-size: 1.4rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .modal-eco-item .eco-val {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .modal-eco-item .eco-lbl {
+            font-size: 0.7rem;
+            color: #777;
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        /* Savings banner */
+        .modal-savings-banner {
+            background: linear-gradient(135deg, #2D5016 0%, #56C596 100%);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .modal-savings-banner i { font-size: 1.5rem; opacity: 0.9; }
+
+        .modal-savings-banner .save-text {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .modal-savings-banner .save-val {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* Modal Action Buttons */
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: auto;
+        }
+
+        .modal-cart-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .modal-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(86,197,150,0.4);
+        }
+
+        .modal-scores-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .score-pill {
+            flex: 1;
+            padding: 0.5rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .score-pill strong {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 3rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 { color: var(--secondary); margin-bottom: 1rem; }
+
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover { color: var(--secondary); }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                padding: 2rem 1.5rem;
+            }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-stats { justify-content: center; }
+            #results {
+                grid-template-columns: 1fr;
+                padding: 0 1.5rem;
+            }
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { gap: 1rem; }
+            .thrift-section, .ai-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+            .section-header h2 { font-size: 2rem; }
+            .modal-body { grid-template-columns: 1fr; }
+            .modal-image-panel {
+                border-radius: 24px 24px 0 0;
+                min-height: 280px;
+                max-height: 300px;
+            }
+            .modal-details-panel { padding: 1.5rem; }
+            .modal-container { width: 95%; max-height: 95vh; }
+        }
+    
+        /* ========================================
+           LIST & RENT SECTIONS
+        ======================================== */
+        .action-sections {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+        .action-section-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 0 3rem;
+        }
+        .action-section-header h2 { font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem; }
+        .action-section-header p { color: #666; }
+        .action-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 8px 35px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .action-card-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+        }
+        .action-card-header .hdr-icon {
+            width: 46px; height: 46px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; flex-shrink: 0;
+        }
+        .list-hdr-bg { background: linear-gradient(135deg, #E8F5E9, #C8E6C9); }
+        .rent-hdr-bg { background: linear-gradient(135deg, #FFF3E0, #FFE0B2); }
+        .action-card-header h3 { color: var(--primary); font-size: 1.15rem; margin-bottom: 0.15rem; }
+        .action-card-header p { color: #999; font-size: 0.82rem; }
+        .action-card-body { padding: 1.6rem 2rem; }
+        .fg { margin-bottom: 1rem; }
+        .fg label { display:block; font-weight:600; color:var(--primary); margin-bottom:0.35rem; font-size:0.82rem; }
+        .fg input, .fg select, .fg textarea {
+            width:100%; padding:0.7rem 0.9rem;
+            border:1.5px solid #e0e0e0; border-radius:10px;
+            font-size:0.88rem; font-family:inherit; outline:none;
+            transition:border-color 0.2s; background:#fafafa;
+        }
+        .fg input:focus, .fg select:focus, .fg textarea:focus { border-color:var(--secondary); background:white; }
+        .fg textarea { resize:vertical; min-height:72px; }
+        .fr2 { display:grid; grid-template-columns:1fr 1fr; gap:0.7rem; }
+        .req { color:#f44336; }
+        /* 4-image grid */
+        .img4-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.5rem; }
+        .img4-slot {
+            border:1.5px dashed #c8c8c8; border-radius:9px; aspect-ratio:1;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            cursor:pointer; transition:all 0.2s; background:#fafafa;
+            position:relative; overflow:hidden;
+            font-size:0.68rem; color:#bbb; gap:0.25rem; text-align:center; padding:0.3rem;
+        }
+        .img4-slot:hover { border-color:var(--secondary); background:#E8F5E9; color:var(--secondary); }
+        .img4-slot.has-img { border-style:solid; border-color:var(--secondary); }
+        .img4-slot input { display:none; }
+        .img4-slot img { width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:7px; }
+        .img4-slot .xbtn {
+            display:none; position:absolute; top:2px; right:2px;
+            background:rgba(244,67,54,0.88); color:white; border:none;
+            border-radius:50%; width:16px; height:16px; font-size:0.62rem;
+            cursor:pointer; align-items:center; justify-content:center; z-index:2;
+        }
+        .img4-slot.has-img:hover .xbtn { display:flex; }
+        .img4-slot i { font-size:1.2rem; }
+        /* Size chips */
+        .sz-grid { display:flex; flex-wrap:wrap; gap:0.35rem; }
+        .sz-chip {
+            padding:0.3rem 0.75rem; border:1.5px solid #e0e0e0; border-radius:20px;
+            font-size:0.78rem; cursor:pointer; font-weight:600; transition:all 0.2s; background:white;
+        }
+        .sz-chip:hover { border-color:var(--secondary); color:var(--secondary); }
+        .sz-chip.sel { border-color:var(--secondary); background:var(--secondary); color:white; }
+        /* Signature */
+        .sig-wrap { border:1.5px solid #e0e0e0; border-radius:10px; overflow:hidden; }
+        .sig-bar {
+            background:#f8f8f8; padding:0.45rem 0.8rem;
+            display:flex; align-items:center; gap:0.5rem;
+            border-bottom:1px solid #e0e0e0; font-size:0.78rem; color:#777;
+        }
+        .sig-bar-btn {
+            padding:0.28rem 0.65rem; border:1px solid #ddd; background:white;
+            border-radius:6px; font-size:0.73rem; cursor:pointer; transition:all 0.2s;
+        }
+        .sig-bar-btn:hover { background:var(--secondary); color:white; border-color:var(--secondary); }
+        canvas#rSigCanvas { display:block; width:100%; height:100px; cursor:crosshair; touch-action:none; background:white; }
+        /* Agreement scroll */
+        .agree-scroll {
+            background:#fafafa; border:1px solid #e0e0e0; border-radius:9px;
+            padding:0.9rem 1rem; max-height:120px; overflow-y:auto;
+            font-size:0.75rem; color:#666; line-height:1.6; margin-bottom:0.8rem;
+        }
+        .agree-scroll h5 { color:var(--primary); margin-bottom:0.4rem; font-size:0.82rem; }
+        /* Submit buttons */
+        .list-btn {
+            width:100%; padding:0.85rem; margin-top:0.4rem;
+            background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 100%);
+            color:white; border:none; border-radius:12px;
+            font-weight:700; font-size:0.92rem; cursor:pointer; transition:all 0.3s;
+        }
+        .list-btn:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(86,197,150,0.35); }
+        .rent-btn {
+            width:100%; padding:0.85rem; margin-top:0.4rem;
+            background:linear-gradient(135deg,var(--accent) 0%,#e67e22 100%);
+            color:white; border:none; border-radius:12px;
+            font-weight:700; font-size:0.92rem; cursor:pointer; transition:all 0.3s;
+        }
+        .rent-btn:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(244,162,97,0.4); }
+        /* Toast */
+        .act-toast {
+            position:fixed; bottom:2rem; left:50%;
+            transform:translateX(-50%) translateY(120px);
+            background:var(--primary); color:white;
+            padding:0.9rem 2rem; border-radius:30px;
+            font-weight:600; z-index:99999;
+            transition:transform 0.4s ease;
+            box-shadow:0 8px 25px rgba(0,0,0,0.2);
+            display:flex; align-items:center; gap:0.5rem;
+            white-space:nowrap; font-size:0.92rem;
+        }
+        .act-toast.show { transform:translateX(-50%) translateY(0); }
+        @media(max-width:900px){ .action-sections{grid-template-columns:1fr;} }
+        @media(max-width:600px){ .fr2{grid-template-columns:1fr;} }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-leaf"></i> EcoThrift
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" onclick="window.location.href='profile.html'" title="My Profile">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="icon-btn" onclick="window.location.href='cart.html'" title="Shopping Cart">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+                <button class="login-btn" onclick="window.location.href='login.html'">Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Sustainable Fashion <span class="highlight">Made Easy</span></h1>
+                <p>Discover pre-loved treasures and reduce your carbon footprint. Every thrift purchase saves an average of 4.8kg of CO₂ emissions!</p>
+                <div class="hero-stats">
+                    <div class="stat-box">
+                        <div class="number">4.8kg</div>
+                        <div class="label">CO₂ Saved</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">2,700L</div>
+                        <div class="label">Water Saved</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="number">90%</div>
+                        <div class="label">Less Waste</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="thrifty.png" alt="Sustainable Fashion" onerror="this.src='https://via.placeholder.com/500x600?text=EcoThrift'">
+            </div>
+        </div>
+    </section>
+
+    <!-- Thrift Collections -->
+    <section class="thrift-section">
+        <div class="section-header">
+            <h2>🛍️ Thrift Collections</h2>
+            <p>Browse our curated collection of sustainable fashion</p>
+        </div>
+        <div class="collections-grid">
+            <div class="collection-card" onclick="filterCategory('shirts')">
+                <div class="collection-icon">👔</div>
+                <h3>Shirts</h3>
+                <p>Sustainable & Stylish</p>
+            </div>
+            <div class="collection-card" onclick="filterCategory('tshirts')">
+                <div class="collection-icon">👕</div>
+                <h3>T-Shirts</h3>
+                <p>Eco-Friendly Basics</p>
+            </div>
+            <div class="collection-card" onclick="filterCategory('dresses')">
+                <div class="collection-icon">👗</div>
+                <h3>Dresses</h3>
+                <p>Pre-Loved Fashion</p>
+            </div>
+            <div class="collection-card" onclick="filterCategory('jackets')">
+                <div class="collection-icon">🧥</div>
+                <h3>Jackets</h3>
+                <p>Secondhand Quality</p>
+            </div>
+            <div class="collection-card" onclick="filterCategory('sweaters')">
+                <div class="collection-icon">🧶</div>
+                <h3>Sweaters</h3>
+                <p>Cozy & Sustainable</p>
+            </div>
+            <div class="collection-card" onclick="filterCategory('jeans')">
+                <div class="collection-icon">👖</div>
+                <h3>Jeans</h3>
+                <p>Timeless Denim</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Recommendation Section -->
+    <section class="ai-section">
+        <h2>🤖 AI-Powered Recommendations</h2>
+        <p>Upload any fashion image and get personalized sustainable alternatives instantly</p>
+        <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <h3>Upload Your Fashion Image</h3>
+            <p>Drag & drop or click to browse (JPG, PNG, WEBP, GIF)</p>
+            <input type="file" id="imageUpload" accept="image/*">
+        </div>
+        <button class="upload-btn" id="uploadBtn">
+            <i class="fas fa-magic"></i> Get Recommendations
+        </button>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>🌱 Finding sustainable alternatives...</p>
+        </div>
+        <div id="errorMessage"></div>
+    </section>
+
+    <!-- Results -->
+    <div id="results"></div>
+
+    <!-- ========================================
+         QUICK VIEW MODAL
+    ======================================== -->
+    <div class="modal-overlay" id="quickViewModal" onclick="closeQuickView(event)">
+        <div class="modal-container">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="modal-body">
+                <!-- Left: Image -->
+                <div class="modal-image-panel">
+                    <img id="modal-img" src="" alt="Product Image"
+                         onerror="this.src='https://via.placeholder.com/500x600?text=No+Image'">
+                    <span class="modal-eco-badge grade-A" id="modal-badge">Eco A</span>
+                </div>
+
+                <!-- Right: Details -->
+                <div class="modal-details-panel">
+                    <div>
+                        <p class="modal-brand" id="modal-brand">Zara</p>
+                        <h2 class="modal-title" id="modal-title">Product Name</h2>
+                        <p class="modal-price" id="modal-price">₹0.00</p>
+                    </div>
+
+                    <hr class="modal-divider">
+
+                    <!-- Description -->
+                    <div class="modal-description-section">
+                        <h4><i class="fas fa-tag"></i> Description</h4>
+                        <p id="modal-description">No description available.</p>
+                    </div>
+
+                    <!-- Material -->
+                    <div class="modal-material">
+                        <i class="fas fa-tshirt"></i>
+                        <span id="modal-composition">Material: Unknown</span>
+                    </div>
+
+                    <hr class="modal-divider">
+
+                    <!-- Eco Metrics -->
+                    <div>
+                        <h4 style="font-size:0.85rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">
+                            🌍 Environmental Impact
+                        </h4>
+                        <div class="modal-eco-grid">
+                            <div class="modal-eco-item">
+                                <span class="eco-icon">☁️</span>
+                                <span class="eco-val" id="modal-carbon">0 kg</span>
+                                <span class="eco-lbl">CO₂ Footprint</span>
+                            </div>
+                            <div class="modal-eco-item">
+                                <span class="eco-icon">💧</span>
+                                <span class="eco-val" id="modal-water">0 L</span>
+                                <span class="eco-lbl">Water Used</span>
+                            </div>
+                            <div class="modal-eco-item">
+                                <span class="eco-icon">⚡</span>
+                                <span class="eco-val" id="modal-energy">0 MJ</span>
+                                <span class="eco-lbl">Energy Used</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Savings Banner -->
+                    <div class="modal-savings-banner">
+                        <i class="fas fa-leaf"></i>
+                        <div>
+                            <div class="save-text">Choosing this saves approx.</div>
+                            <div class="save-val" id="modal-savings">0 kg CO₂ vs buying new</div>
+                        </div>
+                    </div>
+
+                    <!-- AI Scores -->
+                    <div class="modal-scores-row">
+                        <div class="score-pill">
+                            <strong id="modal-match">0%</strong>
+                            Visual Match
+                        </div>
+                        <div class="score-pill">
+                            <strong id="modal-eco-score">0%</strong>
+                            Eco Score
+                        </div>
+                        <div class="score-pill">
+                            <strong id="modal-hybrid">0%</strong>
+                            Hybrid Score
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="modal-actions">
+                        <button class="modal-cart-btn" id="modal-cart-btn">
+                            <i class="fas fa-shopping-bag"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- LIST & RENT — CLICK TO OPEN NEW PAGE -->
+    <div style="max-width:1400px;margin:5rem auto 4rem;padding:0 3rem;">
+        <div style="text-align:center;margin-bottom:2.5rem;">
+            <h2 style="font-size:2.2rem;color:#2D5016;font-family:'Segoe UI',sans-serif;margin-bottom:0.5rem;">Give Fashion a Second Life</h2>
+            <p style="color:#888;font-size:1.05rem;">List your pre-loved pieces or rent something special for your next occasion</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px;margin:0 auto;">
+
+            <!-- LIST CARD -->
+            <a href="List.html" style="text-decoration:none;">
+                <div style="background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 35px rgba(0,0,0,0.08);transition:all 0.3s;cursor:pointer;border:2px solid transparent;"
+                     onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 20px 50px rgba(45,80,22,0.18)';this.style.borderColor='#56C596'"
+                     onmouseout="this.style.transform='';this.style.boxShadow='0 8px 35px rgba(0,0,0,0.08)';this.style.borderColor='transparent'">
+                    <div style="background:linear-gradient(135deg,#2D5016 0%,#4a8c27 50%,#56C596 100%);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;">
+                        <div style="position:absolute;inset:0;background:radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 55%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.07) 0%, transparent 55%);"></div>
+                        <div style="position:relative;z-index:1;">
+                            <div style="width:72px;height:72px;background:rgba(255,255,255,0.2);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1rem;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.3);">📦</div>
+                            <h3 style="font-size:1.5rem;color:white;font-weight:700;margin-bottom:0.4rem;">List Your Item</h3>
+                            <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Sell pre-loved fashion & earn</p>
+                        </div>
+                    </div>
+                    <div style="padding:1.8rem 2rem;">
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;">
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#56C596;font-weight:700;">✓</span> Upload up to 4 photos</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#56C596;font-weight:700;">✓</span> Set your own price</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#56C596;font-weight:700;">✓</span> Goes live instantly</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#56C596;font-weight:700;">✓</span> Help reduce fashion waste</li>
+                        </ul>
+                        <div style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#56C596,#2D5016);color:white;border:none;border-radius:14px;font-weight:700;font-size:0.95rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                            <i class="fas fa-upload"></i> Start Listing →
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- RENT CARD -->
+            <a href="Rent.html" style="text-decoration:none;">
+                <div style="background:white;border-radius:24px;overflow:hidden;box-shadow:0 8px 35px rgba(0,0,0,0.08);transition:all 0.3s;cursor:pointer;border:2px solid transparent;"
+                     onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 20px 50px rgba(244,162,97,0.25)';this.style.borderColor='#F4A261'"
+                     onmouseout="this.style.transform='';this.style.boxShadow='0 8px 35px rgba(0,0,0,0.08)';this.style.borderColor='transparent'">
+                    <div style="background:linear-gradient(135deg,#7B3F00 0%,#c0621a 50%,#F4A261 100%);padding:3rem 2rem;text-align:center;position:relative;overflow:hidden;">
+                        <div style="position:absolute;inset:0;background:radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 55%), radial-gradient(circle at 20% 20%, rgba(255,255,255,0.07) 0%, transparent 55%);"></div>
+                        <div style="position:relative;z-index:1;">
+                            <div style="width:72px;height:72px;background:rgba(255,255,255,0.2);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 1rem;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.3);">🔑</div>
+                            <h3 style="font-size:1.5rem;color:white;font-weight:700;margin-bottom:0.4rem;">Rent an Item</h3>
+                            <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Wear it for the occasion, return after</p>
+                        </div>
+                    </div>
+                    <div style="padding:1.8rem 2rem;">
+                        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;">
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#F4A261;font-weight:700;">✓</span> Designer pieces at low cost</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#F4A261;font-weight:700;">✓</span> Book by dates & occasion</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#F4A261;font-weight:700;">✓</span> Digital rental agreement</li>
+                            <li style="display:flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:#555;"><span style="color:#F4A261;font-weight:700;">✓</span> Confirmation within 2 hours</li>
+                        </ul>
+                        <div style="width:100%;padding:0.9rem;background:linear-gradient(135deg,#F4A261,#c0621a);color:white;border:none;border-radius:14px;font-weight:700;font-size:0.95rem;text-align:center;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
+                            <i class="fas fa-key"></i> Browse & Rent →
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EcoThrift</h3>
+                <p>Making sustainable fashion accessible through AI-powered recommendations.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="index.html">Home</a></p>
+                <p><a href="about.html">About Us</a></p>
+                <p><a href="contact.html">Contact</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="69010c050506290c0a061d011b000f1d470a0604">[email&#160;protected]</a></p>
+                <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EcoThrift. Building a sustainable future, one garment at a time. 🌍💚</p>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js"></script>
+
+    <script>
+    /* ========================================
+       QUICK VIEW MODAL LOGIC
+    ======================================== */
+
+    // Store current modal product for cart action
+    let currentModalProduct = null;
+
+    /**
+     * Opens Quick View modal with product data
+     * Call this from product cards: openQuickView(productData)
+     */
+    function openQuickView(product) {
+        currentModalProduct = product;
+        const modal = document.getElementById('quickViewModal');
+
+        // --- Image ---
+        const img = document.getElementById('modal-img');
+        img.src = product.image_url || product.image || product.image_path || '';
+        img.alt = product.name || 'Product';
+
+        // --- Badge ---
+        const badge = document.getElementById('modal-badge');
+        const grade = product.sustainability_grade || 'C';
+        badge.textContent = `Eco ${grade}`;
+        badge.className = `modal-eco-badge grade-${grade}`;
+
+        // --- Text Details ---
+        document.getElementById('modal-brand').textContent =
+            (product.brand || 'Zara').toUpperCase();
+
+        document.getElementById('modal-title').textContent =
+            product.name || 'Unknown Product';
+
+        const price = parseFloat(product.price || 0);
+        const currency = product.currency || '₹';
+        document.getElementById('modal-price').textContent =
+            `${currency}${price.toFixed(2)}`;
+
+        // --- Description ---
+        const desc = product.description || product.name || 'No description available for this product.';
+        document.getElementById('modal-description').textContent = desc;
+
+        // --- Material / Composition ---
+        const comp = product.composition ||
+            (product.predicted_fibre ? `100% ${product.predicted_fibre}` : 'Material details not available');
+        document.getElementById('modal-composition').textContent = `Material: ${comp}`;
+
+        // --- Eco Metrics ---
+        document.getElementById('modal-carbon').textContent =
+            `${parseFloat(product.carbon_kg || 0).toFixed(2)} kg`;
+        document.getElementById('modal-water').textContent =
+            `${Math.round(product.water_liters || 0)} L`;
+        document.getElementById('modal-energy').textContent =
+            `${Math.round(product.energy_mj || 0)} MJ`;
+
+        // --- Savings ---
+        const savings = parseFloat(product.savings_kg || 0).toFixed(2);
+        document.getElementById('modal-savings').textContent =
+            `${savings} kg CO₂ vs buying new`;
+
+        // --- AI Scores ---
+        const matchPct = Math.round((product.similarity_score || 0) * 100);
+        const ecoPct = Math.round(product.sustainability_score || 0);
+        const hybridPct = Math.round((product.hybrid_score || 0) * 100);
+
+        document.getElementById('modal-match').textContent = `${matchPct}%`;
+        document.getElementById('modal-eco-score').textContent = `${ecoPct}%`;
+        document.getElementById('modal-hybrid').textContent = `${hybridPct}%`;
+
+        // --- Cart Button ---
+        const cartBtn = document.getElementById('modal-cart-btn');
+        cartBtn.onclick = () => {
+            // Reuse your existing addToCart function from main.js
+            if (typeof addToCart === 'function') {
+                addToCart(product);
+                cartBtn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                cartBtn.style.background = 'linear-gradient(135deg, #4CAF50, #8BC34A)';
+                setTimeout(() => {
+                    cartBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+                    cartBtn.style.background = '';
+                }, 2000);
+            }
+        };
+
+        // Show modal
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    /** Close modal when clicking outside */
+    function closeQuickView(event) {
+        if (event.target === document.getElementById('quickViewModal')) {
+            closeModal();
+        }
+    }
+
+    /** Close modal */
+    function closeModal() {
+        document.getElementById('quickViewModal').classList.remove('active');
+        document.body.style.overflow = '';
+        currentModalProduct = null;
+
+        // Reset cart button
+        const cartBtn = document.getElementById('modal-cart-btn');
+        cartBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+        cartBtn.style.background = '';
+    }
+
+    /** Close with Escape key */
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    /* ========================================
+       INJECT QUICK VIEW BUTTON INTO PRODUCT CARDS
+       This function wraps your existing card builder.
+       Call it inside your main.js displayResults() function,
+       OR add it as a post-processor below.
+    ======================================== */
+
+    /**
+     * Adds Quick View button to existing product cards.
+     * Call this after your recommendations are rendered in main.js
+     */
+    function injectQuickViewButtons(products) {
+        const cards = document.querySelectorAll('.product-card');
+        cards.forEach((card, index) => {
+            // Skip if button already exists
+            if (card.querySelector('.quick-view-btn')) return;
+
+            const imagePanel = card.querySelector('.product-image');
+            if (!imagePanel) return;
+
+            const btn = document.createElement('button');
+            btn.className = 'quick-view-btn';
+            btn.innerHTML = '<i class="fas fa-eye"></i> Quick View';
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                if (products && products[index]) {
+                    openQuickView(products[index]);
+                }
+            };
+            imagePanel.appendChild(btn);
+        });
+    }
+
+
+    // Make openQuickView globally accessible for inline onclick usage
+    window.openQuickView = openQuickView;
+    window.closeModal = closeModal;
+    window.closeQuickView = closeQuickView;
+    window.injectQuickViewButtons = injectQuickViewButtons;
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - EcoThrift</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #2D5016; --secondary: #56C596; --accent: #F4A261; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #FAF8F3 0%, #E8F5E9 100%); min-height: 100vh; }
+        nav { background: white; padding: 1rem 3rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--primary); font-weight: 500; }
+        .profile-container { max-width: 1400px; margin: 2rem auto; padding: 0 3rem; display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
+        .profile-sidebar { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); height: fit-content; position: sticky; top: 100px; }
+        .profile-avatar { width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; border: 4px solid var(--secondary); background: linear-gradient(135deg,#E8F5E9,#C8E6C9); font-size: 3rem; }
+        .sidebar-name { text-align: center; color: var(--primary); font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .member-since { text-align: center; color: #888; font-size: 0.82rem; margin-bottom: 1.2rem; }
+        .eco-level-badge { background: linear-gradient(135deg, var(--secondary), var(--primary)); color: white; padding: 1rem; border-radius: 12px; text-align: center; margin-bottom: 1.4rem; }
+        .eco-level-badge h3 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .eco-level-badge p { font-size: 0.85rem; opacity: 0.9; }
+        .menu-item { padding: 0.85rem 1rem; margin: 0.2rem 0; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.8rem; color: #666; font-weight: 500; font-size: 0.92rem; }
+        .menu-item:hover { background: #f5f5f5; color: var(--primary); }
+        .menu-item.active { background: var(--secondary); color: white; }
+        .menu-item i { width: 20px; text-align: center; }
+        .menu-logout { color: #f44336 !important; margin-top: 0.6rem; border-top: 1px solid #f5f5f5; padding-top: 0.8rem; }
+        .profile-main { background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); min-height: 400px; }
+        .profile-section { display: none; }
+        .profile-section.active { display: block; }
+        .section-title { font-size: 1.7rem; color: var(--primary); margin-bottom: 1.8rem; display: flex; align-items: center; gap: 0.5rem; }
+        .carbon-dashboard { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .carbon-card { padding: 1.2rem; border-radius: 14px; background: linear-gradient(135deg,#E8F5E9,#C8E6C9); border-left: 4px solid var(--secondary); transition: transform 0.2s; }
+        .carbon-card:hover { transform: translateY(-3px); }
+        .carbon-card h4 { color: var(--primary); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; opacity: 0.8; }
+        .carbon-value { font-size: 1.9rem; font-weight: 800; color: var(--secondary); }
+        .carbon-value .unit { font-size: 0.82rem; font-weight: 400; }
+        .carbon-label { font-size: 0.75rem; color: #777; margin-top: 0.15rem; }
+        .level-box { background: #f9f9f9; border-radius: 14px; padding: 1.2rem; margin-top: 1.2rem; }
+        .level-box-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        .level-title { font-size: 0.95rem; font-weight: 700; color: var(--primary); }
+        .level-sub { font-size: 0.78rem; color: #888; margin-top: 0.15rem; }
+        .progress-track { background: #e0e0e0; border-radius: 20px; height: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg,var(--secondary),var(--primary)); border-radius: 20px; width: 0%; transition: width 1.2s ease; }
+        .impact-wrap { margin-top: 1.2rem; background: linear-gradient(135deg,#2D5016,#56C596); border-radius: 14px; padding: 1.3rem; color: white; }
+        .impact-wrap h4 { margin-bottom: 0.9rem; font-size: 1rem; }
+        .impact-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.7rem; }
+        .impact-cell { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 0.85rem; text-align: center; }
+        .impact-num { font-size: 1.5rem; font-weight: 800; }
+        .impact-lbl { font-size: 0.72rem; opacity: 0.85; margin-top: 0.15rem; }
+        .order-card { padding: 1rem 1.3rem; background: #f9f9f9; border-radius: 12px; margin-bottom: 0.8rem; border-left: 4px solid var(--secondary); }
+        .order-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+        .order-id { font-size: 0.78rem; color: #aaa; }
+        .order-date { color: var(--primary); font-weight: 700; font-size: 0.9rem; margin-top: 0.1rem; }
+        .order-badge { background: #E8F5E9; color: var(--primary); font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 20px; }
+        .order-bottom { display: flex; gap: 1.2rem; font-size: 0.82rem; color: #666; flex-wrap: wrap; }
+        .order-bottom i { color: var(--secondary); margin-right: 0.25rem; }
+        .badges-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+        .badge-card { border-radius: 14px; padding: 1.2rem; text-align: center; border: 2px solid #e5e5e5; }
+        .badge-card.unlocked { border-color: var(--secondary); background: linear-gradient(135deg,#E8F5E9,#C8E6C9); }
+        .badge-card.locked { opacity: 0.4; }
+        .badge-emoji { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+        .badge-name { font-weight: 700; color: var(--primary); font-size: 0.88rem; margin-bottom: 0.2rem; }
+        .badge-desc { font-size: 0.73rem; color: #888; margin-bottom: 0.4rem; }
+        .badge-status { font-size: 0.7rem; font-weight: 700; color: var(--secondary); }
+        .badge-locked { color: #ccc; }
+        .listing-card { background: #fafafa; border-radius: 14px; margin-bottom: 1rem; border: 1px solid #eee; overflow: hidden; cursor: pointer; transition: box-shadow 0.2s; }
+        .listing-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .listing-summary { display: grid; grid-template-columns: 88px 1fr auto; gap: 1rem; align-items: center; padding: 1.1rem; }
+        .listing-thumb { width: 88px; height: 88px; border-radius: 10px; overflow: hidden; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; }
+        .listing-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .listing-info h4 { color: var(--primary); font-weight: 700; margin-bottom: 0.3rem; }
+        .lmeta { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.3rem; }
+        .ltag { font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 600; }
+        .ltag-g { background: #E8F5E9; color: #2D5016; }
+        .ltag-a { background: #FFF3E0; color: #e67e22; }
+        .ltag-b { background: #E3F2FD; color: #1565C0; }
+        .ldesc { font-size: 0.78rem; color: #888; line-height: 1.4; }
+        .lexphint { font-size: 0.72rem; color: #aaa; margin-top: 0.3rem; display: flex; align-items: center; gap: 0.25rem; }
+        .lprice-col { text-align: right; white-space: nowrap; }
+        .lprice { font-size: 1.15rem; font-weight: 800; color: var(--secondary); }
+        .lorig  { font-size: 0.72rem; text-decoration: line-through; color: #bbb; }
+        .ldate  { font-size: 0.7rem; color: #bbb; margin-top: 0.25rem; }
+        .listing-images { display: none; padding: 0 1.1rem 1.1rem; grid-template-columns: repeat(4,1fr); gap: 0.6rem; }
+        .listing-images.open { display: grid; }
+        .limg-slot { aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #f0f0f0; }
+        .limg-slot img { width: 100%; height: 100%; object-fit: cover; }
+        .rental-card { background: #fafafa; border-radius: 14px; padding: 1.2rem; margin-bottom: 0.8rem; border-left: 4px solid var(--accent); }
+        .rental-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.65rem; }
+        .rental-name { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+        .rental-sub { font-size: 0.75rem; color: #aaa; margin-top: 0.12rem; }
+        .rental-status { background: #FFF3E0; color: #e67e22; font-size: 0.7rem; font-weight: 700; padding: 0.22rem 0.65rem; border-radius: 20px; white-space: nowrap; }
+        .rental-details { display: flex; flex-wrap: wrap; gap: 0.8rem; font-size: 0.8rem; color: #666; }
+        .rental-details span { display: flex; align-items: center; gap: 0.25rem; }
+        .rental-details i { color: var(--accent); }
+        .rental-notes { font-size: 0.78rem; color: #888; margin-top: 0.65rem; padding-top: 0.65rem; border-top: 1px solid #f0f0f0; }
+        .empty-state { text-align: center; padding: 3rem 1rem; color: #bbb; }
+        .empty-state i { font-size: 2.8rem; display: block; margin-bottom: 1rem; }
+        .empty-link { display: inline-block; margin-top: 0.8rem; padding: 0.6rem 1.4rem; background: var(--secondary); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.88rem; }
+        .empty-link-amber { background: var(--accent); }
+        @media(max-width:900px){ .profile-container{grid-template-columns:1fr;padding:0 1rem;} .profile-sidebar{position:relative;top:0;} .carbon-dashboard{grid-template-columns:repeat(2,1fr);} .badges-grid{grid-template-columns:repeat(2,1fr);} }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo"><i class="fas fa-leaf"></i> EcoThrift</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="cart.html"><i class="fas fa-shopping-bag"></i> Cart</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="profile-container">
+
+    <aside class="profile-sidebar">
+        <div class="profile-avatar">🌿</div>
+        <div class="sidebar-name"  id="profile-name">Eco Shopper</div>
+        <div class="member-since"  id="member-since">Member since 2024</div>
+        <div class="eco-level-badge">
+            <h3 id="eco-level-title">🌿 Eco Starter</h3>
+            <p>Level <span id="user-level">1</span></p>
+        </div>
+        <div class="menu-item active" data-section="dashboard"    onclick="showSection('dashboard')"><i class="fas fa-leaf"></i><span>Dashboard</span></div>
+        <div class="menu-item"        data-section="orders"       onclick="showSection('orders')"><i class="fas fa-history"></i><span>Order History</span></div>
+        <div class="menu-item"        data-section="achievements" onclick="showSection('achievements')"><i class="fas fa-trophy"></i><span>Achievements</span></div>
+        <div class="menu-item"        data-section="listings"     onclick="showSection('listings')"><i class="fas fa-box-open"></i><span>My Listings</span></div>
+        <div class="menu-item"        data-section="rentals"      onclick="showSection('rentals')"><i class="fas fa-key"></i><span>My Rentals</span></div>
+        <div class="menu-item menu-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></div>
+    </aside>
+
+    <main class="profile-main">
+
+        <!-- DASHBOARD -->
+        <div class="profile-section active" id="dashboard-section">
+            <h2 class="section-title">🌿 My Impact Dashboard</h2>
+            <div class="carbon-dashboard">
+                <div class="carbon-card"><h4>☁️ CO₂ Saved</h4><div class="carbon-value" id="stat-carbon">0 <span class="unit">kg</span></div><div class="carbon-label">Emissions Prevented</div></div>
+                <div class="carbon-card"><h4>💧 Water Saved</h4><div class="carbon-value" id="stat-water">0 <span class="unit">L</span></div><div class="carbon-label">Litres Conserved</div></div>
+                <div class="carbon-card"><h4>🛍️ Purchased</h4><div class="carbon-value" id="stat-items">0</div><div class="carbon-label">Sustainable Purchases</div></div>
+                <div class="carbon-card"><h4>⚡ Energy Saved</h4><div class="carbon-value" id="stat-energy">0 <span class="unit">MJ</span></div><div class="carbon-label">Energy Conserved</div></div>
+                <div class="carbon-card" style="border-left-color:#56C596;"><h4>📦 Listed</h4><div class="carbon-value" id="stat-listed" style="color:#2D5016;">0</div><div class="carbon-label">Items for Sale</div></div>
+                <div class="carbon-card" style="border-left-color:#F4A261;"><h4>🔑 Rented</h4><div class="carbon-value" id="stat-rented" style="color:#e67e22;">0</div><div class="carbon-label">Rental Requests</div></div>
+            </div>
+            <div class="level-box">
+                <div class="level-box-top">
+                    <div><div class="level-title" id="level-label">Level 1 Eco Hero</div><div class="level-sub" id="next-level-text">5 more purchases to Level 2</div></div>
+                    <span style="font-size:1.8rem;">🌱</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill" id="level-progress"></div></div>
+            </div>
+            <div class="impact-wrap">
+                <h4>🌍 Your Impact Equals...</h4>
+                <div class="impact-grid">
+                    <div class="impact-cell"><div class="impact-num" id="impact-car">0</div><div class="impact-lbl">km not driven by car</div></div>
+                    <div class="impact-cell"><div class="impact-num" id="impact-trees">0</div><div class="impact-lbl">trees planted equivalent</div></div>
+                    <div class="impact-cell"><div class="impact-num" id="impact-showers">0</div><div class="impact-lbl">showers of water saved</div></div>
+                    <div class="impact-cell"><div class="impact-num" id="impact-led">0</div><div class="impact-lbl">hours of LED bulb</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ORDERS -->
+        <div class="profile-section" id="orders-section">
+            <h2 class="section-title">📦 My Orders</h2>
+            <div id="orders-list"></div>
+        </div>
+
+        <!-- ACHIEVEMENTS -->
+        <div class="profile-section" id="achievements-section">
+            <h2 class="section-title">🏆 Achievements</h2>
+            <div id="achievements-grid" class="badges-grid"></div>
+        </div>
+
+        <!-- LISTINGS -->
+        <div class="profile-section" id="listings-section">
+            <h2 class="section-title">📦 My Listed Items</h2>
+            <p style="color:#888;font-size:0.83rem;margin:-1rem 0 1.2rem;"><i class="fas fa-info-circle" style="color:var(--secondary);"></i> Click any card to see photos</p>
+            <div id="listings-list"></div>
+        </div>
+
+        <!-- RENTALS -->
+        <div class="profile-section" id="rentals-section">
+            <h2 class="section-title">🔑 My Rental Requests</h2>
+            <div id="rentals-list"></div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+var CART_KEY  = 'et_cart';
+var STATS_KEY = 'et_stats';
+
+function getStats() {
+    try { return JSON.parse(localStorage.getItem(STATS_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+/* ------------------------------------------------------------------ INIT */
+document.addEventListener('DOMContentLoaded', function() {
+    var user = null;
+    try { user = JSON.parse(localStorage.getItem('user')); } catch(e) {}
+    var name   = (user && user.name)     || 'Eco Shopper';
+    var joined = (user && user.joinDate)
+        ? new Date(user.joinDate).toLocaleDateString('en-IN', {year:'numeric', month:'long'})
+        : 'Feb 2026';
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('member-since').textContent = 'Member since ' + joined;
+    showSection('dashboard');
+});
+
+/* --------------------------------------------------------------- NAVIGATE */
+function showSection(section) {
+    document.querySelectorAll('.profile-section').forEach(function(s){ s.classList.remove('active'); });
+    document.querySelectorAll('.menu-item[data-section]').forEach(function(m){ m.classList.remove('active'); });
+    var el = document.getElementById(section + '-section');
+    if (el) el.classList.add('active');
+    var m  = document.querySelector('.menu-item[data-section="' + section + '"]');
+    if (m)  m.classList.add('active');
+    if      (section === 'dashboard')    renderDashboard();
+    else if (section === 'orders')       renderOrders();
+    else if (section === 'achievements') renderAchievements();
+    else if (section === 'listings')     renderListings();
+    else if (section === 'rentals')      renderRentals();
+}
+
+/* ------------------------------------------------------------- DASHBOARD */
+function renderDashboard() {
+    var s = getStats();
+    var carbon = parseFloat(s.totalCarbon || 0);
+    var water  = parseFloat(s.totalWater  || 0);
+    var energy = parseFloat(s.totalEnergy || 0);
+    var items  = parseInt(s.totalItems    || 0);
+    var level  = Math.floor(items / 5) + 1;
+    var listed = 0, rented = 0;
+    try { listed = JSON.parse(localStorage.getItem('et_listings') || '[]').length; } catch(e) {}
+    try { rented = JSON.parse(localStorage.getItem('et_rentals')  || '[]').length; } catch(e) {}
+
+    // Sidebar level
+    var titles = ['🌿 Eco Starter','🌿 Eco Grower','🌳 Eco Warrior','🏆 Eco Champion','👑 Eco Master'];
+    set('eco-level-title', titles[Math.min(level-1, titles.length-1)]);
+    set('user-level', level);
+
+    // Cards
+    set('stat-carbon',  carbon.toFixed(1) + ' kg');
+    set('stat-water',   Math.round(water).toLocaleString() + ' L');
+    set('stat-items',   items);
+    set('stat-energy',  energy.toFixed(0) + ' MJ');
+    set('stat-listed',  listed);
+    set('stat-rented',  rented);
+
+    // Progress
+    var pct      = items === 0 ? 0 : (items % 5) / 5 * 100;
+    var nextN    = items === 0 ? 5 : (items % 5 === 0 ? 5 : 5 - (items % 5));
+    set('level-label',     'Level ' + level + ' Eco Hero');
+    set('next-level-text', nextN + ' more purchases to Level ' + (level + 1));
+    setTimeout(function(){ var b = document.getElementById('level-progress'); if(b) b.style.width = pct + '%'; }, 150);
+
+    // Impact
+    set('impact-car',     (carbon * 6.5).toFixed(1));
+    set('impact-trees',   (carbon / 20).toFixed(1));
+    set('impact-showers', Math.round(water / 60));
+    set('impact-led',     Math.round(energy / 0.05));
+}
+
+/* --------------------------------------------------------------- ORDERS */
+function renderOrders() {
+    var stats  = getStats();
+    var orders = (stats.orders || []).slice().reverse();
+    var c = document.getElementById('orders-list');
+    if (!c) return;
+    if (!orders.length) {
+        c.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><p>No orders yet.</p><br><a class="empty-link" href="index.html">Start shopping →</a></div>';
+        return;
+    }
+    c.innerHTML = orders.map(function(o) {
+        var date  = new Date(o.date).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+        var cnt   = o.items ? o.items.length : 0;
+        var total = parseFloat(o.total || 0).toFixed(2);
+        var co2   = parseFloat(o.co2Saved || 0).toFixed(1);
+        return '<div class="order-card"><div class="order-top"><div><div class="order-id">#' + o.id + '</div><div class="order-date">' + date + '</div></div><span class="order-badge">✓ Delivered</span></div>' +
+            '<div class="order-bottom"><span><i class="fas fa-box"></i>' + cnt + ' item' + (cnt!==1?'s':'') + '</span><span><i class="fas fa-rupee-sign"></i>₹' + total + '</span><span style="color:#56C596"><i class="fas fa-leaf"></i>' + co2 + ' kg CO₂ saved</span></div></div>';
+    }).join('');
+}
+
+/* ---------------------------------------------------------- ACHIEVEMENTS */
+function renderAchievements() {
+    var s = getStats();
+    var ach = (s.achievements || []).slice();
+    var listed = 0;
+    try { listed = JSON.parse(localStorage.getItem('et_listings') || '[]').length; } catch(e) {}
+    if (listed > 0 && ach.indexOf('recycler') === -1) ach.push('recycler');
+
+    var defs = [
+        {id:'first_purchase', e:'🌱', n:'First Steps',  d:'Made your first eco purchase'},
+        {id:'eco_warrior',    e:'⚔️', n:'Eco Warrior',  d:'Purchased 5+ sustainable items'},
+        {id:'planet_saver',   e:'🌍', n:'Planet Saver', d:'Purchased 10+ items'},
+        {id:'carbon_hero',    e:'☁️', n:'Carbon Hero',  d:'Saved 10+ kg of CO₂'},
+        {id:'eco_master',     e:'👑', n:'Eco Master',   d:'Purchased 20+ items'},
+        {id:'recycler',       e:'♻️', n:'Recycler',     d:'Listed an item for resale'}
+    ];
+    var c = document.getElementById('achievements-grid');
+    if (!c) return;
+    c.innerHTML = defs.map(function(b) {
+        var u = ach.indexOf(b.id) !== -1;
+        return '<div class="badge-card ' + (u?'unlocked':'locked') + '"><span class="badge-emoji">' + b.e + '</span><div class="badge-name">' + b.n + '</div><div class="badge-desc">' + b.d + '</div><div class="badge-status ' + (u?'':'badge-locked') + '">' + (u?'✓ Unlocked':'🔒 Locked') + '</div></div>';
+    }).join('');
+}
+
+/* -------------------------------------------------------------- LISTINGS */
+function renderListings() {
+    var listings = [];
+    try { listings = JSON.parse(localStorage.getItem('et_listings') || '[]'); } catch(e) {}
+    var c = document.getElementById('listings-list');
+    if (!c) return;
+    if (!listings.length) {
+        c.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><p>No items listed yet.</p><br><a class="empty-link" href="list-item.html">List your first item →</a></div>';
+        return;
+    }
+    c.innerHTML = listings.slice().reverse().map(function(item, idx) {
+        var date  = new Date(item.date).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+        var price = item.price ? '₹' + parseFloat(item.price).toFixed(0) : '—';
+        var orig  = item.originalPrice ? '<div class="lorig">₹' + parseFloat(item.originalPrice).toFixed(0) + '</div>' : '';
+        var thumb = (item.images && item.images[0])
+            ? '<img src="' + item.images[0] + '" alt="photo">'
+            : '<span>📦</span>';
+        var hasImgs = item.images && item.images.length > 0;
+        var gallery = '';
+        if (hasImgs) {
+            gallery = '<div class="listing-images" id="gi-' + idx + '">' +
+                [0,1,2,3].map(function(i){
+                    return '<div class="limg-slot">' + (item.images[i] ? '<img src="' + item.images[i] + '" alt="photo">' : '') + '</div>';
+                }).join('') + '</div>';
+        }
+        return '<div class="listing-card" onclick="toggleImgs(' + idx + ')">' +
+            '<div class="listing-summary">' +
+                '<div class="listing-thumb">' + thumb + '</div>' +
+                '<div class="listing-info"><h4>' + (item.name||'Item') + '</h4>' +
+                    '<div class="lmeta">' +
+                        (item.cat  ?'<span class="ltag ltag-b">'+item.cat+'</span>':'') +
+                        (item.cond ?'<span class="ltag ltag-g">'+item.cond+'</span>':'') +
+                        (item.size ?'<span class="ltag ltag-a">Size '+item.size+'</span>':'') +
+                        (item.brand?'<span class="ltag ltag-b">'+item.brand+'</span>':'') +
+                    '</div>' +
+                    (item.desc?'<div class="ldesc">'+item.desc.slice(0,80)+(item.desc.length>80?'…':'')+'</div>':'') +
+                    (hasImgs?'<div class="lexphint" id="hint-'+idx+'"><i class="fas fa-images"></i> Click to see photos</div>':'') +
+                '</div>' +
+                '<div class="lprice-col"><div class="lprice">' + price + '</div>' + orig + '<div class="ldate">' + date + '</div><div style="margin-top:0.3rem;"><span class="ltag ltag-g">✓ Listed</span></div></div>' +
+            '</div>' + gallery + '</div>';
+    }).join('');
+}
+
+function toggleImgs(idx) {
+    var g = document.getElementById('gi-' + idx);
+    var h = document.getElementById('hint-' + idx);
+    if (!g) return;
+    g.classList.toggle('open');
+    if (h) h.innerHTML = g.classList.contains('open')
+        ? '<i class="fas fa-chevron-up"></i> Hide photos'
+        : '<i class="fas fa-images"></i> Click to see photos';
+}
+
+/* --------------------------------------------------------------- RENTALS */
+function renderRentals() {
+    var rentals = [];
+    try { rentals = JSON.parse(localStorage.getItem('et_rentals') || '[]'); } catch(e) {}
+    var c = document.getElementById('rentals-list');
+    if (!c) return;
+    if (!rentals.length) {
+        c.innerHTML = '<div class="empty-state"><i class="fas fa-key"></i><p>No rental requests yet.</p><br><a class="empty-link empty-link-amber" href="rent-item.html">🔑 Browse Items to Rent</a></div>';
+        return;
+    }
+    c.innerHTML = rentals.slice().reverse().map(function(r) {
+        var sub   = new Date(r.date).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'});
+        var start = r.start ? new Date(r.start+'T00:00:00').toLocaleDateString('en-IN', {day:'numeric', month:'short'}) : '—';
+        var end   = r.end   ? new Date(r.end  +'T00:00:00').toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'}) : '—';
+        return '<div class="rental-card">' +
+            '<div class="rental-top"><div><div class="rental-name">'+(r.item||'Item')+'</div><div class="rental-sub">Requested '+sub+'</div></div><span class="rental-status">⏳ Pending</span></div>' +
+            '<div class="rental-details">' +
+                '<span><i class="fas fa-calendar-alt"></i>'+start+' → '+end+'</span>' +
+                '<span><i class="fas fa-clock"></i>'+(r.days||'?')+' day'+(r.days!==1?'s':'')+'</span>' +
+                '<span><i class="fas fa-ruler"></i>Size '+(r.size||'—')+'</span>' +
+                (r.occasion?'<span><i class="fas fa-glass-cheers"></i>'+r.occasion+'</span>':'') +
+                (r.city?'<span><i class="fas fa-map-marker-alt"></i>'+r.city+'</span>':'') +
+                (r.phone?'<span><i class="fas fa-phone"></i>'+r.phone+'</span>':'') +
+            '</div>' +
+            (r.notes?'<div class="rental-notes"><i class="fas fa-comment-alt" style="color:var(--accent);margin-right:.35rem;"></i>'+r.notes+'</div>':'') +
+        '</div>';
+    }).join('');
+}
+
+/* ------------------------------------------------------------------ UTIL */
+function set(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; }
+
+function logout() {
+    if (!confirm('Log out of EcoThrift?')) return;
+    localStorage.removeItem('user');
+    localStorage.removeItem(CART_KEY);
+    localStorage.removeItem(STATS_KEY);
+    window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>

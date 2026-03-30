@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - EcoThrift</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2D5016;
+            --secondary: #56C596;
+            --cream: #FAF8F3;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--cream);
+            color: #333;
+        }
+
+        /* Navigation (same as index) */
+        nav {
+            background: white;
+            padding: 1rem 3rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Hero */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 4rem 3rem;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-hero p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Mission Section */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .mission-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .mission-card i {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .mission-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .mission-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Video Section */
+        .video-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .video-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Impact Stats */
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-card .number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Thrift Fashion Explanation */
+        .thrift-explanation {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 4rem;
+        }
+
+        .thrift-explanation h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .thrift-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .thrift-text h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .thrift-text p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .thrift-text ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .thrift-text li {
+            padding: 0.8rem 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .thrift-text li i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        .thrift-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .thrift-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 3rem 3rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .thrift-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-leaf"></i> EcoThrift
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" style="color: var(--secondary);">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i></a></li>
+                <li><a href="cart.html"><i class="fas fa-shopping-bag"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="about-hero">
+        <h1>🌍 About EcoThrift</h1>
+        <p>Making sustainable fashion accessible through AI technology</p>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="content-section">
+        <h2 class="section-title">Our Mission</h2>
+        
+        <div class="mission-grid">
+            <div class="mission-card">
+                <i class="fas fa-recycle"></i>
+                <h3>Reduce Waste</h3>
+                <p>The fashion industry produces 92 million tons of waste annually. We're changing that by promoting thrift fashion.</p>
+            </div>
+            
+            <div class="mission-card">
+                <i class="fas fa-leaf"></i>
+                <h3>Lower Carbon</h3>
+                <p>Every thrifted item saves an average of 4.8kg of CO₂ emissions compared to buying new.</p>
+            </div>
+            
+            <div class="mission-card">
+                <i class="fas fa-tint"></i>
+                <h3>Save Water</h3>
+                <p>Thrift shopping saves approximately 2,700 liters of water per garment.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="content-section">
+        <div class="video-section">
+            <h2>🎬 Understanding Carbon Footprint in Fashion</h2>
+            <div class="video-container">
+                <!-- Replace with your preferred YouTube video about carbon footprint in fashion -->
+                <iframe 
+                    src="https://www.youtube.com/embed/8q7_aV8eLUE" 
+                    title="simpleshow explains the Carbon Footprint" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Stats -->
+    <section class="content-section">
+        <h2 class="section-title">Our Environmental Impact</h2>
+        
+        <div class="impact-stats">
+            <div class="stat-card">
+                <div class="number">500K+</div>
+                <div class="label">Items Thrifted</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="number">2.4M kg</div>
+                <div class="label">CO₂ Saved</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="number">1.3B L</div>
+                <div class="label">Water Conserved</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="number">90%</div>
+                <div class="label">Waste Reduced</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thrift Fashion Explanation -->
+    <section class="content-section">
+        <div class="thrift-explanation">
+            <h2>Why Thrift Fashion Matters</h2>
+            
+            <div class="thrift-content">
+                <div class="thrift-text">
+                    <h3>🌱 The Problem with Fast Fashion</h3>
+                    <p>The fashion industry is the second-largest polluter globally, contributing to:</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> 10% of global carbon emissions</li>
+                        <li><i class="fas fa-check-circle"></i> 20% of global wastewater</li>
+                        <li><i class="fas fa-check-circle"></i> 85% of textiles ending in landfills</li>
+                        <li><i class="fas fa-check-circle"></i> Microplastic pollution in oceans</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 2rem;">💚 The Thrift Solution</h3>
+                    <p>By choosing second-hand fashion, you're:</p>
+                    <ul>
+                        <li><i class="fas fa-leaf"></i> Extending garment lifespan</li>
+                        <li><i class="fas fa-leaf"></i> Reducing demand for new production</li>
+                        <li><i class="fas fa-leaf"></i> Saving natural resources</li>
+                        <li><i class="fas fa-leaf"></i> Supporting circular economy</li>
+                    </ul>
+                </div>
+                
+                <div class="thrift-image">
+                    <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800" alt="Sustainable Fashion">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carbon Footprint Breakdown -->
+    <section class="content-section">
+        <div class="thrift-explanation">
+            <h2>Carbon Footprint: Fashion Edition</h2>
+            
+            <div class="thrift-content">
+                <div class="thrift-image">
+                    <img src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800" alt="Carbon Footprint">
+                </div>
+                
+                <div class="thrift-text">
+                    <h3>📊 Average Carbon Emissions</h3>
+                    <p><strong>New Jeans:</strong> 33.4 kg CO₂</p>
+                    <p><strong>New T-Shirt:</strong> 7.0 kg CO₂</p>
+                    <p><strong>New Dress:</strong> 17.2 kg CO₂</p>
+                    <p><strong>New Jacket:</strong> 35.8 kg CO₂</p>
+                    
+                    <h3 style="margin-top: 2rem;">🌿 Thrift Impact</h3>
+                    <p>When you buy second-hand:</p>
+                    <ul>
+                        <li><i class="fas fa-star"></i> <strong>82% less</strong> carbon emissions</li>
+                        <li><i class="fas fa-star"></i> <strong>87% less</strong> water usage</li>
+                        <li><i class="fas fa-star"></i> <strong>92% less</strong> textile waste</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem; padding: 1rem; background: #E8F5E9; border-radius: 10px; border-left: 4px solid var(--secondary);">
+                        <strong>💡 Fun Fact:</strong> If everyone bought one used item instead of new this year, we'd save 5.7 billion pounds of CO₂ - equivalent to taking 76 million cars off the road!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EcoThrift</h3>
+                <p>Making sustainable fashion accessible through AI.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <p><a href="index.html" style="color:white">Home</a></p>
+                <p><a href="about.html" style="color:white">About</a></p>
+                <p><a href="contact.html" style="color:white">Contact</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>hello@ecothrift.com</p>
+                <p>+91 9876543210</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EcoThrift 🌍💚</p>
+        </div>
+    </footer>
+</body>
+</html>

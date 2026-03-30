@@ -1,0 +1,36 @@
+# EcoThrift requirements.txt
+# Updated for Docker deployment
+
+# Web framework
+flask==2.3.2
+flask-cors==4.0.0
+gunicorn==21.2.0
+werkzeug==2.3.7
+
+# Data
+numpy==1.24.3
+pandas==2.0.3
+
+# ML — use tensorflow-cpu in Docker (smaller image, no GPU needed)
+tensorflow-cpu==2.13.0
+scikit-learn==1.3.0
+
+# Image processing
+Pillow==9.5.0
+opencv-python-headless==4.8.0.74
+
+# Utilities
+requests==2.31.0
+python-dotenv==1.0.0
+tqdm==4.66.1
+
+# Visualisation (only needed if you use these in the app)
+matplotlib==3.7.2
+seaborn==0.12.2
+plotly==5.15.0
+
+# Dev/test — not needed at runtime but harmless to include
+pytest==7.4.0
+
+# NOT included — streamlit==1.25.0
+# Streamlit is not used in your Flask app — remove to keep image smaller
